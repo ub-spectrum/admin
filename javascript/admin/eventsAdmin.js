@@ -1,18 +1,38 @@
 var jsonTestExisting, jsonTestPending, pending, index;
 
 window.onload = function() {
+  var date = new Date(),
+      todaysDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+      todaysTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+console.log(todaysTime.hour12);
   $('#disabledContainer').find('input, textarea, button, select').prop('disabled',true);
   // add call to api to get admins from the database
   // test data based on how i expected it to look
-  jsonTestExisting = [{eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "Free", additionalInfo: "additional info"},
-                  {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
-                  {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"}];
+  jsonTestExisting = [{eventName: "Event Name", description: "Event Description", date: "3/15/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "Free", additionalInfo: "additional info"},
+                  {eventName: "Event Name", description: "Event Description", date: "3/14/2019", startTime: "7:53 AM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
+                  {eventName: "Event Name", description: "Event Description", date: "4/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"}];
 
   jsonTestPending = [{eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
                   {eventName: "Other Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
                   {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
                   {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
                 {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"}];
+
+  var futureDates = jsonTestExisting.filter(date => {
+    console.log(date);
+    if (date) {
+      if (date.date === todaysDate) {
+        return date.startTime > todaysTime;
+      } else {
+        return date && (date.date > todaysDate);
+      }
+    }
+    // Filter out dates in the past or falsey values
+
+  });
+
+  console.log(futureDates);
+
 
   // adds the existing admins to the page
   addExistingEvents(jsonTestExisting);
@@ -26,15 +46,14 @@ window.onload = function() {
 */
 function addPendingEvents(pendingEvents) {
   // loops through all of the pending admins
-  pendingEvents.map(function(event, index) {
+  pendingEvents.map(function(eventObj, index) {
     // dynamically creates a card object for each admin
     var myCol = $('<div class="col-sm-3 col-md-3 pb-2"></div>'),
-        eventString = JSON.stringify(event),
-        myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div c1lass="card-body">' +
-                  '<h5 class="card-title">' + event.eventName + '</h5><p class="card-text">Description: ' + event.description +
-                  '</p><a href="#" id="infoBtn'+ index + '" onclick=pendingInfoEvent(this) class="btn btn-outline-info btn-sm pull-left" name=' +
-                  eventString +'>More Info</a><br></div><br></div>');
-
+        myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
+                  '<h5 class="card-title">' + eventObj.eventName + '</h5>' +
+                  '<p class="card-text">Description: ' + eventObj.description + '<br>Date: ' + eventObj.date +
+                  '<br> Time: ' + eventObj.startTime + ' - ' + eventObj.endTime + '</p><a href="#" id="existingInfoBtn'+ index +
+                  '" onclick=existingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
     // adds card to card list
     myPanel.appendTo(myCol);
     myCol.appendTo('#pendingEvents');
@@ -51,8 +70,9 @@ function addExistingEvents(events) {
         eventString = JSON.stringify(eventObj),
         myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
                   '<h5 class="card-title">' + eventObj.eventName + '</h5>' +
-                  '<p class="card-text">Description: ' + eventObj.description + '</p><a href="#" id="existingInfoBtn'+ index +
-                  '" onclick=existingInfoEvent(this) class="btn btn-outline-info btn-sm pull-left" name=' +
+                  '<p class="card-text">Description: ' + eventObj.description + '<br>Date: ' + eventObj.date +
+                  '<br> Time: ' + eventObj.startTime + ' - ' + eventObj.endTime + '</p><a href="#" id="existingInfoBtn'+ index +
+                  '" onclick=existingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left" name=' +
                   eventString +'>More Info</a></div></div>');
 
     // adds the card to the page
@@ -112,6 +132,11 @@ $("#editBtn").click(function() {
 });
 
 $("#saveBtnPending").click(function() {
+  $('#disabledContainer').find('input, textarea, button, select').prop('disabled', true);
+});
+
+$("#closeBtn").click(function() {
+  $('body, html, #disabledContainer').scrollTop(0);
   $('#disabledContainer').find('input, textarea, button, select').prop('disabled', true);
 });
 

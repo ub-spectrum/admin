@@ -40,19 +40,49 @@
     <link rel="stylesheet" type="text/css" href="../../bootstrap/css/bootstrap.min.css">
 </head>
 <body>
-  <br><h1 align="center">Crowdsourced Data Reviews Management</h1>
+  <br><h1 align="center">Crowdsourced Data Reviews Management</h1><br>
+  <button type="button" class="btn btn-primary btn" style="float: right; margin-right:3em;">Add New Dataset +</button><br>
   <br>
   <div class="panel"><div class="panel-body">
-    <div style="width:600px;">
-      <button type="button" id="addNewDataset" class="btn btn-secondary btn-lg">Add New Dataset</button>
-    </div>
     <h3 align="center">Current Datasets</h3>
-    <div class="card-deck-wrapper">
-    <div class="card-deck" id="currentDatasets" align="center"></div>
-    <br>
-    <h3 align="center">Archived Datasets</h3>
-    <div class="card-deck", id="archivedDatasets" align="center"</div></div>
+    <table class="table" id="currentDatasets">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Dataset Name</th>
+          <th scope="col">Posted By</th>
+          <th scope="col">Description</th>
+          <th scope="col">File Type</th>
+          <th scope="col">Split #</th>
+          <th scope="col" id="progress"></th>
+          <th scope="col" id="download"></th>
+          <th scope="col" id="archive"></th>
+        </tr>
+      </thead>
+      <tbody id="currentDatasetsBody"></tbody>
+    </table>
   </div></div>
+
+<br><br><div style="background-color:#D2D5E0;color:white;padding:10px;"></div><br>
+
+    <br> <div class="panel"><div class="panel-body">
+        <h3 align="center">Archive Datasets</h3>
+        <table class="table" id="archiveDatasets">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Dataset Name</th>
+              <th scope="col">Posted By</th>
+              <th scope="col">Archive Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">File Type</th>
+              <th scope="col">Split #</th>
+              <th scope="col" id="progress"></th>
+              <th scope="col" id="download"></th>
+              <th scope="col" id="archive"></th>
+            </tr>
+          </thead>
+          <tbody id="archiveDatasetsBody"></tbody>
+        </table>
+      </div></div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
   <script src="../../bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../../javascript/admin/crowdsourceAdmin.js"></script>

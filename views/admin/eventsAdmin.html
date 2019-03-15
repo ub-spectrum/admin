@@ -13,6 +13,8 @@
       .h1 {
         font-family: 'Open Sans', serif;
         font-size: 40px;
+        display: inline-block;
+        margin: 0;
       }
       .container {
         height:300px;
@@ -44,20 +46,23 @@
     </nav>
     <link rel="stylesheet" type="text/css" href="../../bootstrap/css/bootstrap.min.css">
 </head>
+
 <body>
-  <br><h1 align="center">Events Management</h1>
   <br>
+    <h1 align="center">Events Management</h1><br>
+    <button type="button" class="btn btn-primary btn" style="float: right; margin-right:3em;">Add New Event +</button><br>
 
   <div class="panel"><div class="panel-body">
-    <div style="width:600px;">
-      <button type="button" class="btn btn-secondary btn-lg">Add New Event</button>
-    </div>
-
-    <h3 align="center">Existing Events</h3>
+    <h3 align="center">Existing Events</h3><br>
     <div class="card-deck-wrapper">
     <div class="card-deck" id="existingEvents" align="center"></div>
     <br>
-    <h3 align="center">Pending Events</h3>
+  </div></div></div>
+
+    <br><br><div style="background-color:#D2D5E0;color:white;padding:10px;"></div><br><br>
+
+    <div class="panel"><div class="panel-body">
+    <h3 align="center">Pending Events</h3><br>
     <div class="card-deck", id="pendingEvents" align="center"</div></div><br>
   </div>
   </div><br>
@@ -194,10 +199,11 @@
       </div>
 
       <div class="modal-footer">
+        <button type="button" id="closeBtn" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>
         <button type="button" id="saveBtnExisting" class="btn btn-outline-primary btn-sm pull-left">Save</button>
         <button type="button" id="saveBtnPending" class="btn btn-outline-primary btn-sm pull-left">Save</button>
-        <button type="button" id="editBtn" class="btn btn-outline-warning btn-sm pull-left">Edit</button>
-        <button type="button" id="editEvent" class="btn btn-outline-warning btn-sm pull-left">Edit</button>
+        <button type="button" id="editBtn" class="btn btn-outline-primary btn-sm pull-left">Edit</button>
+        <button type="button" id="editEvent" class="btn btn-outline-primary btn-sm pull-left">Edit</button>
         <button type="button" id="acceptEvent" class="btn btn-outline-success btn-sm pull-left">Accept</button>
         <button type="button" id="declineEvent" class="btn btn-outline-danger btn-sm pull-left">Decline</button>
         <button type="button" id="deleteEvent" class="btn btn-outline-danger btn-sm pull-left">Delete</button>

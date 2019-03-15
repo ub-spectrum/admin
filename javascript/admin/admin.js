@@ -45,11 +45,10 @@ function addExistingAdmins(admins) {
   // loops through all admins and adds them as a single card
   admins.map(function(adminObj, index) {
     var myCol = $('<div class="col-sm-3 col-md-3 pb-2"></div>'),
-        adminString = JSON.stringify(adminObj),
         myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
                   '<h5 class="card-title">' + adminObj.name + '</h5>' +
                   '<p class="card-text">Status: ' + adminObj.status + '<br>Email: ' + adminObj.email +
-                  '</p><a href="#" id="updateBtn'+ index + '" onclick=updateAdmin(this) class="btn btn-outline-warning btn-sm pull-left">Edit</a>&nbsp&nbsp&nbsp' +
+                  '</p><a href="#" id="updateBtn'+ index + '" onclick=updateAdmin(this) class="btn btn-outline-primary btn-sm pull-left">Edit</a>&nbsp&nbsp&nbsp' +
                   '<a href="#" id="deleteBtn'+ index + '" onclick=deleteAdmin(this) class="btn btn-outline-danger btn-sm pull-left">Delete</a></div></div>');
 
     // adds the card to the page

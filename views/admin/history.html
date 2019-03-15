@@ -45,29 +45,32 @@
 </head>
 <body>
   <br><h1 align="center">History Management</h1><br>
-  <h6 align="center"> This page keeps track of every action that was done on the site for reference</h6>
+  <h6 align="center"> This page keeps track of every action that was done on the site for reference</h6><br>
+
 <div class="container">
-  <table class="table">
+  <table class="table" id="historyTable">
     <thead class="thead-dark">
       <tr>
         <th scope="col">Application</th>
         <th scope="col">User</th>
         <th scope="col">Data Changed</th>
         <th scope="col">Action</th>
-        <th scope="col">Timestamp</th>
-      </tr>
-      <tr class="filters">
-        <th><select class="form-control" id="app"></th>
-        <th><input type="text" class="form-control"></th>
-        <th>
-          <div class="input-group date" id="filterDateTime" data-target-input="nearest">
-            <input type="text" class="form-control datetimepicker-input" data-target="#filterDateTime"/>
-              <div class="input-group-append" data-target="#eventEndTime" data-toggle="datetimepicker">
-              <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
-            </div></div>
+        <th scope="col">Timestamp
+          <button type="button" style="float: right;" class="btn btn-secondary btn-sm" onclick=showFilters()>Filter</button>
         </th>
-        <th><input type="text" class="form-control"></th>
-        <th><input type="text" class="form-control"></th>
+      </tr>
+      <tr class="filters" id="rowFilters" hidden>
+        <th><select class="form-control" id="app" change=filterApplication()>
+              <option></option>
+              <option>User Management</option>
+              <option>Crowdsourced Data Review</option>
+              <option>Events Calendar</option>
+            </select>
+        </th>
+        <th><input type="text" class="form-control" id="user" onkeyup=filterUsers()></th>
+        <th><input type="text" class="form-control" id="dataChanged" onkeyup=filterDataChanged()></th>
+        <th><input type="text" class="form-control" onkeyup=filterAction() id="action"></th>
+        <th><input type="text" class="form-control" onkeyup=filterTimestamp() id="timestamp"></th>
       </tr>
     </thead>
     <tbody id="historyTableBody"></tbody>
