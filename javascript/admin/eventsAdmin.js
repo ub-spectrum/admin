@@ -1,84 +1,63 @@
-var jsonTestExisting, jsonTestPending, pending, index;
+var pending, index;
 
 window.onload = function() {
-  var date = new Date(),
-      todaysDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
-      todaysTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-console.log(todaysTime.hour12);
-  $('#disabledContainer').find('input, textarea, button, select').prop('disabled',true);
-  // add call to api to get admins from the database
-  // test data based on how i expected it to look
-  jsonTestExisting = [{eventName: "Event Name", description: "Event Description", date: "3/15/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "Free", additionalInfo: "additional info"},
-                  {eventName: "Event Name", description: "Event Description", date: "3/14/2019", startTime: "7:53 AM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
-                  {eventName: "Event Name", description: "Event Description", date: "4/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["brainy", "free"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"}];
+  $.get("http://stark.cse.buffalo.edu/ubspectrum/events/fetchEvents.php", function(data, status){
+    var date = new Date();
+    data.map(function(dataObj, index) {
+      if (date.toISOString() < dataObj.start) {
+          // adds the existing admins to the page
+          addExistingEvents(dataObj);
 
-  jsonTestPending = [{eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
-                  {eventName: "Other Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
-                  {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
-                  {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"},
-                {eventName: "Event Name", description: "Event Description", date: "3/10/2019", startTime: "6:53 PM", endTime: "6:53 PM", categories: ["Category 1", "Category 4"], contact: {phone: "000-000-0000", email: "@email"}, linkToEvent: "http://link.com", linkToFlyer: "linkToFlyer", location: "location", cost: "1.00", additionalInfo: "additional info"}];
-
-  var futureDates = jsonTestExisting.filter(date => {
-    console.log(date);
-    if (date) {
-      if (date.date === todaysDate) {
-        return date.startTime > todaysTime;
-      } else {
-        return date && (date.date > todaysDate);
+          // adds the existing admins to the page
+          addPendingEvents(dataObj);
       }
-    }
-    // Filter out dates in the past or falsey values
 
+    });
   });
 
-  console.log(futureDates);
+  $('#disabledContainer').find('input, textarea, button, select').prop('disabled',true);
 
-
-  // adds the existing admins to the page
-  addExistingEvents(jsonTestExisting);
-
-  // adds the existing admins to the page
-  addPendingEvents(jsonTestPending);
 }
 
 /**
   function to dynamically add pending admins to the web page
 */
-function addPendingEvents(pendingEvents) {
-  // loops through all of the pending admins
-  pendingEvents.map(function(eventObj, index) {
-    // dynamically creates a card object for each admin
-    var myCol = $('<div class="col-sm-3 col-md-3 pb-2"></div>'),
+function addPendingEvents(pendingEvent) {
+    var startDate = new Date(pendingEvent.start),
+        endDate = new Date(pendingEvent.end),
+        formatStartDate = startDate.toLocaleDateString(),
+        formatStartTime = startDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
+        formatEndTime = endDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
+        myCol = $('<div class="col-sm-3 col-md-3 pb-2"></div>'),
         myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
-                  '<h5 class="card-title">' + eventObj.eventName + '</h5>' +
-                  '<p class="card-text">Description: ' + eventObj.description + '<br>Date: ' + eventObj.date +
-                  '<br> Time: ' + eventObj.startTime + ' - ' + eventObj.endTime + '</p><a href="#" id="existingInfoBtn'+ index +
-                  '" onclick=existingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
+                  '<h5 class="card-title">' + pendingEvent.title + '</h5>' +
+                  '<p class="card-text">Description: ' + pendingEvent.description + '<br>Date: ' + formatStartDate +
+                  '<br> Time: ' + formatStartTime + ' - ' + formatEndTime + '</p><a href="#" id="existingInfoBtn'+ index +
+                  '" onclick=existingInfoEvent(this) name='+ pendingEvent.id + 'class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
     // adds card to card list
     myPanel.appendTo(myCol);
     myCol.appendTo('#pendingEvents');
-  });
 }
 
 /**
   function to dynamically add the already existing admins to the page
 */
-function addExistingEvents(events) {
-  // loops through all admins and adds them as a single card
-  events.map(function(eventObj, index) {
-    var myCol = $('<div class="col-sm-3 col-md-3 pb-2"></div>'),
-        eventString = JSON.stringify(eventObj),
-        myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
-                  '<h5 class="card-title">' + eventObj.eventName + '</h5>' +
-                  '<p class="card-text">Description: ' + eventObj.description + '<br>Date: ' + eventObj.date +
-                  '<br> Time: ' + eventObj.startTime + ' - ' + eventObj.endTime + '</p><a href="#" id="existingInfoBtn'+ index +
-                  '" onclick=existingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left" name=' +
-                  eventString +'>More Info</a></div></div>');
+function addExistingEvents(event) {
+  var startDate = new Date(event.start),
+      endDate = new Date(event.end),
+      formatStartDate = startDate.toLocaleDateString(),
+      formatStartTime = startDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
+      formatEndTime = endDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
+      myCol = $('<div class="col-sm-3 col-md-3 pb-2"></div>'),
+      myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
+                '<h5 class="card-title">' + event.title + '</h5>' +
+                '<p class="card-text">Description: ' + event.description + '<br>Date: ' + formatStartDate +
+                '<br> Time: ' + formatStartTime + ' - ' + formatEndTime + '</p><a href="#" id='+ event.id +
+                ' onclick=existingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
 
-    // adds the card to the page
-    myPanel.appendTo(myCol);
-    myCol.appendTo('#existingEvents');
-  });
+  // adds the card to the page
+  myPanel.appendTo(myCol);
+  myCol.appendTo('#existingEvents');
 }
 
 /**
@@ -94,8 +73,9 @@ $(function () {
   function to show the start time picker
 */
 $(function () {
-    $('#eventStartTime').datetimepicker({
-        format: 'LT'
+    $('#eventStartTime').flatpickr({
+      enableTime: true,
+      dateFormat: "Y-m-d H:i",
     });
 });
 
@@ -154,6 +134,7 @@ $("#eventFree").change(function() {
   function to show event info window
 */
 function pendingInfoEvent(e) {
+  console.log(e);
   index = e.id.substr(-1);
   pending = true;
 
@@ -172,15 +153,16 @@ function pendingInfoEvent(e) {
   $("#form8").prop("disabled", true);
 
   // adds the current data to the form
-  addDataToWindow(jsonTestPending[index]);
+  //addDataToWindow(jsonTestPending[index]);
 }
 
 /**
   fucntion to add teh existing events into to the window
 */
 function existingInfoEvent(e) {
-  index = e.id.substr(-1);
-  pending = false;
+  //console.log(e.id);
+  //index = e.id.substr(-1);
+  //pending = false;
 
   // hides the buttons for the pending admins
   $("#saveBtnExisting").hide();
@@ -193,8 +175,15 @@ function existingInfoEvent(e) {
   $("#deleteEvent").show();
   $("#editEvent").show();
 
+    $.ajax({
+      type: "POST",
+      url: "../../server/fetchEventInfo.php",
+      data: {id: e.id}
+    }).then(function(data) {
+      addDataToWindow(data);
+    });
+
   // adds the card data to the window for more info
-  addDataToWindow(jsonTestExisting[index]);
 }
 
 /**
@@ -205,31 +194,31 @@ function addDataToWindow(eventInfo) {
   $('#exampleModal').modal('show');
 
   // autopopulates the event name
-  document.getElementById("eventName").value = eventInfo.eventName;
+  document.getElementById("eventName").value = eventInfo.NAME;
 
   // autopopulates the event description
-  document.getElementById("eventDescription").value = eventInfo.description;
+  document.getElementById("eventDescription").value = eventInfo.DESCRIPTION;
 
   // autopopulates the date picker
-  $('#eventDate').datetimepicker('date', moment(eventInfo.date, 'L'));
+  $('#eventDate').datetimepicker('date', moment(eventInfo.START_TIME, 'L'));
 
   // autopopulates the start time picker
-  $('#eventStartTime').datetimepicker('date', moment(eventInfo.startTime, 'LT'));
+  $('#eventStartTime').datetimepicker('date', moment(eventInfo.START_TIME, 'LT'));
 
   // autopopulates the end time picker
-  $('#eventEndTime').datetimepicker('date', moment(eventInfo.endTime, 'LT'));
+  $('#eventEndTime').datetimepicker('date', moment(eventInfo.END_TIME, 'LT'));
 
   // autopopulates the event location
-  document.getElementById("eventLocation").value = eventInfo.location;
+  document.getElementById("eventLocation").value = eventInfo.VENUE;
 
   // autopopulates the event cost
-  var cost = eventInfo.cost,
+  var cost = eventInfo.COST,
       eventCostBox = document.getElementById("eventCost");
   if (cost === "Free") {
       $("#eventFree").prop("checked", true);
       eventCostBox.disabled = true;
   } else {
-    eventCostBox.value = parseFloat(eventInfo.cost);
+    eventCostBox.value = parseFloat(cost);
   }
 
   // auto sets the selected categories -- names to be changed when set
@@ -258,17 +247,18 @@ function addDataToWindow(eventInfo) {
   }
 
   // autopopulates the contact label
-  document.getElementById("contactEmail").value = eventInfo.contact.email;
+  document.getElementById("contactEmail").value = eventInfo.EMAIL;
 
   // autopopulates the contact phone number
-  document.getElementById("contactPhone").value = eventInfo.contact.phone;
+  document.getElementById("contactPhone").value = eventInfo.PHONE;
 
   // autopopulates the event link
-  document.getElementById("eventLink").value = eventInfo.linkToEvent;
+  console.log(eventInfo.LINK);
+  document.getElementById("eventLink").value = eventInfo.LINK;
 
   // autopopulates the event flyer link
-  document.getElementById("eventFlyerLink").value = eventInfo.linkToFlyer;
+  //document.getElementById("eventFlyerLink").value = eventInfo.linkToFlyer;
 
   // autopopulates the events additional info
-  document.getElementById("eventAdditionalInfo").value = eventInfo.additionalInfo;
+  document.getElementById("eventAdditionalInfo").value = eventInfo.ADDITIONAL_FILE;
 }

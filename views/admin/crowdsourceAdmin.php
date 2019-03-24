@@ -1,3 +1,11 @@
+<?php
+  session_start();
+  if($_SESSION == array() || !isset($_SESSION['sessionID'])) {
+    header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/views/admin/signin.php");
+    exit();
+  }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,23 +24,26 @@
       }
     </style>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Admin</a>
+      <a class="navbar-brand" href="homepage.php">Admin</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="admin.html">User Management</a>
+            <a class="nav-link" href="admin.php">User Management</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="eventsAdmin.html">Events Management</a>
+            <a class="nav-link" href="eventsAdmin.php">Events Management</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="crowdsourceAdmin.html">Crowdsourced Data Reviews Management<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="crowdsourceAdmin.php">Crowdsourced Data Reviews Management<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="history.html" tabindex="-1">History Management</a>
+            <a class="nav-link" href="history.php" tabindex="-1">History Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="signin.php" tabindex="-1">Sign Out</a>
           </li>
         </ul>
       </div>
@@ -41,7 +52,8 @@
 </head>
 <body>
   <br><h1 align="center">Crowdsourced Data Reviews Management</h1><br>
-  <button type="button" class="btn btn-primary btn" style="float: right; margin-right:3em;">Add New Dataset +</button><br>
+  <button type="button" class="btn btn-primary btn" style="float: right; margin-right:4em;">Go To Student Sign Up</button>
+  <button type="button" class="btn btn-primary btn" style="float: right; margin-right:1em;">Add New Dataset +</button><br>
   <br>
   <div class="panel"><div class="panel-body">
     <h3 align="center">Current Datasets</h3>

@@ -1,3 +1,11 @@
+<?php
+  session_start();
+  if($_SESSION == array() || !isset($_SESSION['sessionID'])) {
+    header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/views/admin/signin.php");
+    exit();
+  }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +28,7 @@
       }
     </style>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Admin</a>
+      <a class="navbar-brand" href="homepage.php">Admin</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -30,13 +38,16 @@
             <a class="nav-link" href="#">User Management</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="eventsAdmin.html">Events Management</a>
+            <a class="nav-link" href="eventsAdmin.php">Events Management</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="crowdsourceAdmin.html">Crowdsourced Data Reviews Management</a>
+            <a class="nav-link" href="crowdsourceAdmin.php">Crowdsourced Data Reviews Management</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="history.html" tabindex="-1">History Management<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="history.php" tabindex="-1">History Management<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="signin.php" tabindex="-1">Sign Out</a>
           </li>
         </ul>
       </div>
