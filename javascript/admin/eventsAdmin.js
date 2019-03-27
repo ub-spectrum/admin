@@ -63,31 +63,20 @@ function addExistingEvents(event) {
 /**
   function to show the date picker
 */
-$(function () {
-    $('#eventEndTime').datetimepicker({
-        format: 'LT'
-    });
-});
 
 /*
   function to show the start time picker
 */
-$(function () {
-    $('#eventStartTime').flatpickr({
-      enableTime: true,
-      dateFormat: "Y-m-d H:i",
-    });
-});
+  $('#eventStartTime').flatpickr({
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
 
-/*
-  function to show the end time picker
-*/
-$(function () {
-    $('#eventDate').datetimepicker({
-        format: 'L'
-    });
-});
+  });
 
+  $('#eventEndTime').flatpickr({
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+  });
 /*
   fucntion to handle the edit button in the more info window
 */
@@ -149,21 +138,12 @@ function pendingInfoEvent(e) {
   $("#saveBtnExisting").hide();
   $("#saveBtnPending").hide();
 
-  // disables the form so you cant edit unless you click edit
-  $("#form8").prop("disabled", true);
-
-  // adds the current data to the form
-  //addDataToWindow(jsonTestPending[index]);
 }
 
 /**
   fucntion to add teh existing events into to the window
 */
 function existingInfoEvent(e) {
-  //console.log(e.id);
-  //index = e.id.substr(-1);
-  //pending = false;
-
   // hides the buttons for the pending admins
   $("#saveBtnExisting").hide();
   $("#saveBtnPending").hide();
@@ -199,14 +179,11 @@ function addDataToWindow(eventInfo) {
   // autopopulates the event description
   document.getElementById("eventDescription").value = eventInfo.DESCRIPTION;
 
-  // autopopulates the date picker
-  $('#eventDate').datetimepicker('date', moment(eventInfo.START_TIME, 'L'));
-
   // autopopulates the start time picker
-  $('#eventStartTime').datetimepicker('date', moment(eventInfo.START_TIME, 'LT'));
+  document.getElementById("eventStartTime").value = eventInfo.START_TIME;
 
   // autopopulates the end time picker
-  $('#eventEndTime').datetimepicker('date', moment(eventInfo.END_TIME, 'LT'));
+  document.getElementById("eventEndTime").value = eventInfo.START_TIME;
 
   // autopopulates the event location
   document.getElementById("eventLocation").value = eventInfo.VENUE;
@@ -221,7 +198,7 @@ function addDataToWindow(eventInfo) {
     eventCostBox.value = parseFloat(cost);
   }
 
-  // auto sets the selected categories -- names to be changed when set
+/*  // auto sets the selected categories -- names to be changed when set
   if (eventInfo.categories.includes("Category 1")) {
     $("#category1").prop("checked", true);
   }
@@ -245,7 +222,7 @@ function addDataToWindow(eventInfo) {
   if (eventInfo.categories.includes("Category 6")) {
     $("#category6").prop("checked", true);
   }
-
+*/
   // autopopulates the contact label
   document.getElementById("contactEmail").value = eventInfo.EMAIL;
 

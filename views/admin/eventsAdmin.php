@@ -62,7 +62,7 @@
   <br>
     <h1 align="center">Events Management</h1><br>
 
-    <button type="button" class="btn btn-primary btn" style="float: right;margin-right:3em;">Go To Calendar</button>
+    <button type="button" onclick="window.location.href='http://stark.cse.buffalo.edu/ubspectrum/events/'" class="btn btn-primary btn" style="float: right;margin-right:3em;">Go To Calendar</button>
     <button type="button" class="btn btn-primary btn" style="float: right;margin-right:1em ">Add New Event +</button><br>
 
   <div class="panel"><div class="panel-body">
@@ -108,24 +108,21 @@
               <textarea type="text" id="eventDescription" class="md-textarea form-control" rows="4"></textarea>
             </div>
 
-            <label data-error="wrong" data-success="right" for="form8">Date: </label>
-            <div class="input-group date" id="eventDate" data-target-input="nearest">
-              <input type="text" class="form-control datetimepicker-input" data-target="#eventDate"/>
-              <div class="input-group-append" data-target="#eventDate" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            <div class="row mb-3">
+              <div class="col-xs-12 col-md-4 text-md-right">
+                <label for="eventStartTime">Start At</label>
+              </div>
+              <div class="col-xs-12 col-md-3 col-lg-2">
+                <input type="text" name="eventStartTime" id="eventStartTime" class="form-control" maxlength="10" required />
               </div>
             </div>
 
-            <label data-error="wrong" data-success="right" for="form8">Start Time: </label>
-            <div id="eventStartTime">
-              <input type="text" data-input/>
-            </div>
-
-            <label data-error="wrong" data-success="right" for="form8">End Time: </label>
-            <div class="input-group date" id="eventEndTime" data-target-input="nearest">
-              <input type="text" class="form-control datetimepicker-input" data-target="#eventEndTime"/>
-              <div class="input-group-append" data-target="#eventEndTime" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
+            <div class="row mb-3">
+              <div class="col-xs-12 col-md-4 text-md-right">
+                <label for="eventEndTime">End At</label>
+              </div>
+              <div class="col-xs-12 col-md-3 col-lg-2">
+                <input type="text" name="eventEndTime" id="eventEndTime" class="form-control" maxlength="10" required />
               </div>
             </div>
 
@@ -222,12 +219,10 @@
   </div></div></div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="../../bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../../javascript/admin/eventsAdmin.js"></script>
   <script type="text/javascript" src="../../bootstrap/js/moment/moment.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </body>
 </html>
