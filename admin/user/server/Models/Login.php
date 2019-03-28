@@ -1,5 +1,5 @@
 <?php
-  require_once "../../events/Models/DatabaseConnector.php";
+  require_once "../../../events/Models/DatabaseConnector.php";
 
   class Login extends DatabaseConnector {
 
@@ -25,35 +25,15 @@
           session_start();
           $_SESSION['sessionID'] = session_id();
           // redirect to the homepage
-          header("Location: ../views/admin/homepage.php");
+          header("Location: /ubspectrum/admin/user/homepage.php");
         } else {
-          header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/views/admin/signin.php?invalid=true");
+          header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/user/signin.php?invalid=true");
         }
       } else {
-        header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/views/admin/signin.php?access=false");
-      }}
-    }
-
-    public static function getEventInfo($id) {
-      // connect to database
-      $conn = self::getDB();
-
-      // process and call query
-      $username = $conn->real_escape_string($id);
-      $eventInfo = "SELECT * from tbl_events WHERE ID='".$id."'";
-
-      // get result
-      $result = mysqli_query($conn, $eventInfo);
-
-      if ($result != NULL) {
-        // get the result
-        $r = mysqli_fetch_assoc($result);
-
-        return json_encode($r);
-      } else {
-        //echo '<script type="text/javascript">', 'callAlert();','</script>';
+        header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/user/signin.php?access=false");
       }
     }
+  }
 
     public static function signUp($firstName, $lastName, $email, $password) {
       $conn = self::getDB();
@@ -89,11 +69,8 @@
                 $stmt->execute();
                 $stmt->close();
 
-                header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/views/admin/signin.php");
+                header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/user/signin.php");
     }
-
-
-
   }
 
 

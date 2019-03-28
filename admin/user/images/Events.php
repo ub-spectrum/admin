@@ -1,23 +1,30 @@
-
 <?php
     require_once "DatabaseConnector.php";
 
     class Events extends DatabaseConnector {
 
-        public static function getAll($startTime = '', $endTime=''){
+        public static function getAll($after = '', $before='', $categories=''){
             $temparray = array();
             $conn = self::getDB();
 
             $fetchEventsQuery = "SELECT ID, NAME, VENUE, APPROVAL_STATUS, DATE_FORMAT(START_TIME, '%Y-%m-%dT%TZ') AS START_TIME,DATE_FORMAT(END_TIME, '%Y-%m-%dT%TZ') AS END_TIME, CATEGORY, DESCRIPTION, LINK, PHONE, EMAIL  FROM tbl_events WHERE 1=1";
 
-            if($startTime !== ''){
-                $startTime = $conn->real_escape_string($startTime);
-                $fetchEventsQuery .= "AND TIME >= $startTime ";
+            if($categories != NULL && $categories != ''){
+            // $categoryIdList = $conn->real_escape_string($categories);
+            $fetchEventsQuery = "SELECT ID, NAME, VENUE, DATE_FORMAT(START_TIME, '%Y-%m-%dT%TZ') AS START_TIME,DATE_FORMAT(END_TIME, '%Y-%m-%dT%TZ') AS END_TIME, CATEGORY, DESCRIPTION, LINK, PHONE, EMAIL  FROM tbl_events
+                                WHERE ID IN ( SELECT EVENT_ID FROM tbl_event_categories WHERE CATEGORY_ID IN ($categories))
+                                ;";
+
             }
 
-            if($endTime !== ''){
-                $endTime = $conn->real_escape_string($endTime);
-                $fetchEventsQuery .= "AND TIME <= $endTime ";
+            if($after !== ''){
+                $after = $conn->real_escape_string($after);
+                $fetchEventsQuery .= "AND START_TIME >= '$after' ";
+            }
+
+            if($before !== ''){
+                $before = $conn->real_escape_string($before);
+                $fetchEventsQuery .= "AND END_TIME <= '$before' ";
             }
 
             $result = mysqli_query($conn,$fetchEventsQuery);
@@ -157,6 +164,28 @@
                 }
                 $stmt->close();
             }
+
+
         }
+
+        public static function getEventInfo($eventId){
+            $fetchedEvent = array("ID"=>'', "NAME"=>'', "VENUE"=>'',"DATE"=> '', "START_TIME" => '', "END_TIME"=>'',"CATEGORY"=>'',"DESCRIPTION"=>'',"LINK"=>'',"PHONE"=>'',"EMAIL"=>'',"COST"=>'',"UB_CAMPUS_LOCATION"=>'', "APPROVAL_STATUS"=>'');
+            $conn = self::getDB();
+            $eventId = $conn->real_escape_string($eventId);
+            $fetchFlyerQuery = "SELECT ID,NAME, ADDITIONAL_FILE, ADDITIONAL_FILE_SIZE, ADDITIONAL_FILE_TYPE,
+            VENUE, DATE_FORMAT(START_TIME, '%W %M %D, %Y') AS DATE, DATE_FORMAT(START_TIME, '%l:%i %p') AS START_TIME,DATE_FORMAT(END_TIME, '%l:%i %p') AS END_TIME, CATEGORY, DESCRIPTION, LINK, PHONE, EMAIL,COST, UB_CAMPUS_LOCATION, APPROVAL_STATUS  FROM tbl_events WHERE ID=$eventId;";
+            $result = mysqli_query($conn,$fetchFlyerQuery);
+
+            if($result != NULL){
+                while($row = mysqli_fetch_assoc($result))
+                {
+                   $fetchedEvent  = $row;
+                }
+            }
+
+            return $fetchedEvent;
+        }
+
     }
+
 ?>

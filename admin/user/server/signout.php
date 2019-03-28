@@ -7,7 +7,6 @@
   $_SESSION = array();
   session_unset();
   session_destroy();
-  //echo $_SESSION['sessionID'];
 
-  header("Location: ../views/admin/signin.php", true, 301);
+  header("Location: /ubspectrum/admin/user/signin.php", true, 301);
  ?>

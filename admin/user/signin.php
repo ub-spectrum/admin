@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <?php include('../../../events/head-tags.php') ?>
+    <?php include('/ubspectrum/events/head-tags.php') ?>
     <style>
       input {
         margin-bottom:10px;
@@ -18,15 +18,15 @@
     <link rel="stylesheet" href="/ubspectrum/events/tagify.css">
 
     <title>UB Spectrum Admin</title>
-    <?php include('../../../events/navbar-bootstrap.php')?>
+    <?php include('/ubspectrum/events/navbar-bootstrap.php')?>
     <br>
     <h1>Sign into UB Spectrum Admin</h1>
-    <link rel="stylesheet" type="text/css" href="../../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/ubspectrum/bootstrap/css/bootstrap.min.css">
   </head>
 
   <body class="text-center"><br><br>
 
-    <form class="form-signin" style="margin: 0 auto; width:250px" align="center" action="../../server/signin.php" method="post">
+    <form class="form-signin" style="margin: 0 auto; width:250px" align="center" action="server/signin.php" method="post">
       <h3 align="center">Sign in</h3>
       <h8 id="error" align="center">Username or password is incorrect</h8>
       <label for="inputEmail">
@@ -37,10 +37,10 @@
     </form>
     <button type="button" onclick="window.location.href='SignUp.php'" class="btn btn-link">Not an admin? Apply to be one</button><br><br>
     <h8 id="access" align="center">Admin Request Pending</h8>
-    <?php include('../../../events/footer-bootstrap.php') ?>
+    <?php include('/ubspectrum/events/footer-bootstrap.php') ?>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
-<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="/ubspectrum/bootstrap/js/bootstrap.min.js"></script>
 <script>
   window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);

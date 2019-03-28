@@ -1,17 +1,18 @@
 var pending, index;
 
 window.onload = function() {
-  $.get("http://stark.cse.buffalo.edu/ubspectrum/events/fetchEvents.php", function(data, status){
+  $.get("/ubspectrum/events/fetchEvents.php", function(data, status){
     var date = new Date();
     data.map(function(dataObj, index) {
       if (date.toISOString() < dataObj.start) {
+        if (dataObj.approve === "approved") {
           // adds the existing admins to the page
           addExistingEvents(dataObj);
-
-          // adds the existing admins to the page
+        } else if (dataObj.approve === "pending") {
+          // adds the pending admins to the page
           addPendingEvents(dataObj);
+        }
       }
-
     });
   });
 
@@ -32,8 +33,8 @@ function addPendingEvents(pendingEvent) {
         myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
                   '<h5 class="card-title">' + pendingEvent.title + '</h5>' +
                   '<p class="card-text">Description: ' + pendingEvent.description + '<br>Date: ' + formatStartDate +
-                  '<br> Time: ' + formatStartTime + ' - ' + formatEndTime + '</p><a href="#" id="existingInfoBtn'+ index +
-                  '" onclick=existingInfoEvent(this) name='+ pendingEvent.id + 'class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
+                  '<br> Time: ' + formatStartTime + ' - ' + formatEndTime + '</p><a href="#" id='+ pendingEvent.id +
+                  ' onclick=existingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
     // adds card to card list
     myPanel.appendTo(myCol);
     myCol.appendTo('#pendingEvents');
@@ -157,7 +158,7 @@ function existingInfoEvent(e) {
 
     $.ajax({
       type: "POST",
-      url: "../../server/fetchEventInfo.php",
+      url: "/ubspectrum/admin/events/server/fetchEventInfo.php",
       data: {id: e.id}
     }).then(function(data) {
       addDataToWindow(data);
