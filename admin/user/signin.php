@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <?php include('/ubspectrum/events/head-tags.php') ?>
+    <?php include('../../events/head-tags.php') ?>
     <style>
       input {
         margin-bottom:10px;
@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="/ubspectrum/events/tagify.css">
 
     <title>UB Spectrum Admin</title>
-    <?php include('/ubspectrum/events/navbar-bootstrap.php')?>
+    <?php include('../../events/navbar-bootstrap.php')?>
     <br>
     <h1>Sign into UB Spectrum Admin</h1>
-    <link rel="stylesheet" type="text/css" href="/ubspectrum/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
   </head>
 
   <body class="text-center"><br><br>
@@ -37,10 +37,12 @@
     </form>
     <button type="button" onclick="window.location.href='SignUp.php'" class="btn btn-link">Not an admin? Apply to be one</button><br><br>
     <h8 id="access" align="center">Admin Request Pending</h8>
-    <?php include('/ubspectrum/events/footer-bootstrap.php') ?>
+    <link rel="stylesheet" href="/ubspectrum/events/tagify.css">
+    <?php include('../../events/footer-bootstrap.php') ?>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
 <script src="/ubspectrum/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="../../events/site.css">
 <script>
   window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);

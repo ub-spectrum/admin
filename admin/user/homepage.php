@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>UB Spectrum Admin</title>
-    <link rel="stylesheet" type="text/css" href="../../bootstrap/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/ubspectrum/bootstrap/css/header.css">
     <style>
       .panel {
         margin-right: 5%;
@@ -37,7 +37,7 @@
    <div class="flip-card" >
        <div class="flip-card-inner">
            <div class="flip-card-front">
-                <img src="../images/logo.png" alt="Avatar" style="width:200px;height:200px;">
+                <img src="images/logo.png" alt="Avatar" style="width:200px;height:200px;">
            </div>
            <div class="flip-card-back">
                 <p>THE INDEPENDENT STUDENT PUBLICATION OF THE UNIVERSITY AT BUFFALO, SINCE 1950</p>
@@ -49,36 +49,11 @@
   <div id="jumbo">
       <div id="textInJumbo">
         <h1>Admin Homepage</h1>
+        <p>Navigate to any app from here</p>
+        <button type="button" onclick="window.location.href='server/signout.php'" class="btn btn-primary btn" style="float: right;margin-right:1em ">Sign Out</button><br>
       </div>
   </div>
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="homepage.php">Admin</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="admin.php">User Management</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../events/eventsAdmin.php">Events Management</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">Crowdsourced Data Reviews Management</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="history.php" tabindex="-1">History Management</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="signout" href="server/signout.php" tabindex="-1">Sign Out</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
     <link rel="stylesheet" type="text/css" href="/ubspectrum/bootstrap/css/bootstrap.min.css">
-    <br><h1 align="center">Admin Homepage</h1><br>
   </head>
   <body>
     <div class="container">

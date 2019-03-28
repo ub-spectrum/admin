@@ -34,7 +34,7 @@
            <div class="flip-card" >
                <div class="flip-card-inner">
                    <div class="flip-card-front">
-                        <img src="../images/logo.png" alt="Avatar" style="width:200px;height:200px;">
+                        <img src="images/logo.png" alt="Avatar" style="width:200px;height:200px;">
                    </div>
                    <div class="flip-card-back">
                         <p>THE INDEPENDENT STUDENT PUBLICATION OF THE UNIVERSITY AT BUFFALO, SINCE 1950</p>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <?php include('/ubspectrum/events/head-tags.php') ?>
+    <?php include('../../events/head-tags.php') ?>
     <style>
       input {
         margin-bottom:10px;
@@ -13,7 +13,7 @@
       }
     </style>
     <title>UB Spectrum Admin</title>
-    <?php include('/ubspectrum/events/navbar-bootstrap.php')?>
+    <?php include('../../events/navbar-bootstrap.php')?>
     <br>
     <h1>Apply to be an Admin</h1>
     <link rel="stylesheet" type="text/css" href="/ubspectrum/bootstrap/css/bootstrap.min.css">
@@ -66,7 +66,7 @@
 
       <button class="btn btn-primary btn-lg" type="submit">Submit Admin Request</button>
     </form>
-    <?php include('/ubspectrum/events/footer-bootstrap.php') ?>
+    <?php include('../../events/footer-bootstrap.php') ?>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
 <script src="/ubspectrum/bootstrap/js/bootstrap.min.js"></script>
