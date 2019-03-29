@@ -117,8 +117,20 @@
 
             <div class="md-form">
               <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form8">Name: </label>
+              <label data-error="wrong" data-success="right" for="form8">Event Name: </label>
               <input type="text" id="eventName" class="form-control validate">
+            </div>
+
+            <div class="md-form">
+              <i class="fas fa-tag prefix grey-text"></i>
+              <label data-error="wrong" data-success="right" for="form8">Venue: </label>
+              <input type="text" id="eventLocation" class="form-control validate">
+            </div>
+
+            <div class="md-form">
+              <i class="fas fa-tag prefix grey-text"></i>
+              <label data-error="wrong" data-success="right" for="form32">Link: </label>
+              <input type="text" id="eventLink" class="form-control validate">
             </div>
 
             <div class="md-form">
@@ -127,28 +139,16 @@
               <textarea type="text" id="eventDescription" class="md-textarea form-control" rows="4"></textarea>
             </div>
 
-            <div class="row mb-3">
-              <div class="col-xs-12 col-md-4 text-md-right">
+            <div class="md-form">
+                <i class="fas fa-pencil prefix grey-text"></i>
                 <label for="eventStartTime">Start At</label>
-              </div>
-              <div class="col-xs-12 col-md-3 col-lg-2">
                 <input type="text" name="eventStartTime" id="eventStartTime" class="form-control" maxlength="10" required />
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <div class="col-xs-12 col-md-4 text-md-right">
-                <label for="eventEndTime">End At</label>
-              </div>
-              <div class="col-xs-12 col-md-3 col-lg-2">
-                <input type="text" name="eventEndTime" id="eventEndTime" class="form-control" maxlength="10" required />
-              </div>
             </div>
 
             <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form8">Location: </label>
-              <input type="text" id="eventLocation" class="form-control validate">
+              <i class="fas fa-pencil prefix grey-text"></i>
+              <label for="eventEndTime">End At</label>
+                <input type="text" name="eventEndTime" id="eventEndTime" class="form-control" maxlength="10" required />
             </div>
 
             <div class="md-form">
@@ -156,38 +156,6 @@
               <label data-error="wrong" data-success="right" for="form32">Cost: </label>
               <input type="number" id="eventCost" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
               <label><input type="checkbox" id="eventFree">Free</label>
-            </div>
-
-
-            <label data-error="wrong" data-success="right" for="form32">Categories: </label><br>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" id="category1" type="checkbox" value="option1">
-              <label class="form-check-label" for="inlineCheckbox1">Category 1</label>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" id="category2" type="checkbox" value="option2">
-              <label class="form-check-label" for="inlineCheckbox2">Category 2</label>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="category3" value="option3">
-              <label class="form-check-label" for="inlineCheckbox3">Category 3</label>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="category4" value="option4">
-              <label class="form-check-label" for="inlineCheckbox3">Category 4</label>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="category5" value="option5">
-              <label class="form-check-label" for="inlineCheckbox5">Category 5</label>
-            </div>
-
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="category6" value="option6">
-              <label class="form-check-label" for="inlineCheckbox3">Category 6</label>
             </div>
 
             <div class="md-form">
@@ -200,12 +168,6 @@
               <i class="fas fa-tag prefix grey-text"></i>
               <label data-error="wrong" data-success="right" for="form32">Contact Phone Number: </label>
               <input type="text" id="contactPhone" class="form-control validate">
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form32">Link: </label>
-              <input type="text" id="eventLink" class="form-control validate">
             </div>
 
             <div class="md-form">
@@ -226,10 +188,7 @@
 
       <div class="modal-footer">
         <button type="button" id="closeBtn" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" id="saveBtnExisting" class="btn btn-outline-primary btn-sm pull-left">Save</button>
-        <button type="button" id="saveBtnPending" class="btn btn-outline-primary btn-sm pull-left">Save</button>
-        <button type="button" id="editBtn" class="btn btn-outline-primary btn-sm pull-left">Edit</button>
-        <button type="button" id="editEvent" class="btn btn-outline-primary btn-sm pull-left">Edit</button>
+        <button type="button" id="saveBtn" class="btn btn-outline-primary btn-sm pull-left">Save</button>
         <button type="button" id="acceptEvent" class="btn btn-outline-success btn-sm pull-left">Accept</button>
         <button type="button" id="declineEvent" class="btn btn-outline-danger btn-sm pull-left">Decline</button>
         <button type="button" id="deleteEvent" class="btn btn-outline-danger btn-sm pull-left">Delete</button>

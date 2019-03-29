@@ -24,6 +24,7 @@
           // start the session if the username and password is correct
           session_start();
           $_SESSION['sessionID'] = session_id();
+          $_SESSION['sessionUser'] = $username;
           // redirect to the homepage
           header("Location: /ubspectrum/admin/user/homepage.php");
         } else {

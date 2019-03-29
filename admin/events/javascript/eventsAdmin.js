@@ -16,8 +16,6 @@ window.onload = function() {
     });
   });
 
-  $('#disabledContainer').find('input, textarea, button, select').prop('disabled',true);
-
 }
 
 /**
@@ -34,7 +32,7 @@ function addPendingEvents(pendingEvent) {
                   '<h5 class="card-title">' + pendingEvent.title + '</h5>' +
                   '<p class="card-text">Description: ' + pendingEvent.description + '<br>Date: ' + formatStartDate +
                   '<br> Time: ' + formatStartTime + ' - ' + formatEndTime + '</p><a href="#" id='+ pendingEvent.id +
-                  ' onclick=existingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
+                  ' onclick=pendingInfoEvent(this) class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
     // adds card to card list
     myPanel.appendTo(myCol);
     myCol.appendTo('#pendingEvents');
@@ -71,43 +69,24 @@ function addExistingEvents(event) {
   $('#eventStartTime').flatpickr({
     enableTime: true,
     dateFormat: "Y-m-d H:i",
+    minDate: new Date(),
+    allowInput:false
 
   });
 
   $('#eventEndTime').flatpickr({
     enableTime: true,
     dateFormat: "Y-m-d H:i",
+    minDate: new Date(),
+    allowInput:false
   });
-/*
-  fucntion to handle the edit button in the more info window
-*/
-$("#editEvent").click(function() {
-  // enables the form to make edits
-  $('#disabledContainer').find('input, textarea, button, select').prop('disabled', false);
 
-  // shows the save button
-  $("#saveBtnExisting").show();
-});
+$("#saveBtn").click(function() {
 
-$("#saveBtnExisting").click(function() {
-  $('#disabledContainer').find('input, textarea, button, select').prop('disabled', true);
-});
-
-$("#editBtn").click(function() {
-  // enables the form to make edits
-  $('#disabledContainer').find('input, textarea, button, select').prop('disabled', false);
-
-  // shows the save button
-  $("#saveBtnPending").show();
-});
-
-$("#saveBtnPending").click(function() {
-  $('#disabledContainer').find('input, textarea, button, select').prop('disabled', true);
 });
 
 $("#closeBtn").click(function() {
-  $('body, html, #disabledContainer').scrollTop(0);
-  $('#disabledContainer').find('input, textarea, button, select').prop('disabled', true);
+  //$('body, html, #disabledContainer').scrollTop(0);
 });
 
 $("#eventFree").change(function() {
@@ -129,16 +108,20 @@ function pendingInfoEvent(e) {
   pending = true;
 
   // shows the pending buttons
-  $("#editBtn").show();
   $("#acceptEvent").show();
   $("#declineEvent").show();
 
   // hides the existing buttons
   $("#deleteEvent").hide();
-  $("#editEvent").hide();
-  $("#saveBtnExisting").hide();
-  $("#saveBtnPending").hide();
 
+
+      $.ajax({
+        type: "POST",
+        url: "/ubspectrum/admin/events/server/fetchEventInfo.php",
+        data: {id: e.id}
+      }).then(function(data) {
+        addDataToWindow(data);
+      });
 }
 
 /**
@@ -146,15 +129,11 @@ function pendingInfoEvent(e) {
 */
 function existingInfoEvent(e) {
   // hides the buttons for the pending admins
-  $("#saveBtnExisting").hide();
-  $("#saveBtnPending").hide();
-  $("#editBtn").hide();
   $("#acceptEvent").hide();
   $("#declineEvent").hide();
 
   // shows the buttons for the existing admins
   $("#deleteEvent").show();
-  $("#editEvent").show();
 
     $.ajax({
       type: "POST",
