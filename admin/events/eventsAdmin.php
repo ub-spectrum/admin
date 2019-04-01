@@ -5,7 +5,6 @@
     exit();
   }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +26,10 @@
       }
       .container {
         height:300px;
+        margin-left:0px;
+        margin-right: 0px;
         overflow-y: scroll;
+        margin:0px;
       }
 
     </style>
@@ -98,108 +100,19 @@
     <div class="card-deck", id="pendingEvents" align="center"</div></div><br>
   </div>
   </div><br>
+</body>
 
-  <div class="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content bg-dark text-white">
-      <div class="modal-header">
-        <h5 class="modal-title" id="existingEventsModal">Event Info</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<script src="/ubspectrum/events/tagify.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+<script src="/ubspectrum/bootstrap/js/popper.js"></script>
 
-      </div>
-
-      <div class="modal-body">
-        <div class="modal-body mx-3">
-          <form id="form8">
-          <div class="container" id="disabledContainer">
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form8">Event Name: </label>
-              <input type="text" id="eventName" class="form-control validate">
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form8">Venue: </label>
-              <input type="text" id="eventLocation" class="form-control validate">
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form32">Link: </label>
-              <input type="text" id="eventLink" class="form-control validate">
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-pencil prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form8">Description: </label>
-              <textarea type="text" id="eventDescription" class="md-textarea form-control" rows="4"></textarea>
-            </div>
-
-            <div class="md-form">
-                <i class="fas fa-pencil prefix grey-text"></i>
-                <label for="eventStartTime">Start At</label>
-                <input type="text" name="eventStartTime" id="eventStartTime" class="form-control" maxlength="10" required />
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-pencil prefix grey-text"></i>
-              <label for="eventEndTime">End At</label>
-                <input type="text" name="eventEndTime" id="eventEndTime" class="form-control" maxlength="10" required />
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form32">Cost: </label>
-              <input type="number" id="eventCost" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" class="form-control currency" id="c2" />
-              <label><input type="checkbox" id="eventFree">Free</label>
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form32">Contact Email: </label>
-              <input type="text" id="contactEmail"  class="form-control validate">
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form32">Contact Phone Number: </label>
-              <input type="text" id="contactPhone" class="form-control validate">
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-tag prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form32">Flyer Link: </label>
-              <input type="text" id="eventFlyerLink" class="form-control validate">
-            </div>
-
-            <div class="md-form">
-              <i class="fas fa-pencil prefix grey-text"></i>
-              <label data-error="wrong" data-success="right" for="form8">Additional Notes: </label>
-              <textarea type="text" id="eventAdditionalInfo" class="md-textarea form-control" rows="4"></textarea>
-            </div>
-
-        </div>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" id="closeBtn" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" id="saveBtn" class="btn btn-outline-primary btn-sm pull-left">Save</button>
-        <button type="button" id="acceptEvent" class="btn btn-outline-success btn-sm pull-left">Accept</button>
-        <button type="button" id="declineEvent" class="btn btn-outline-danger btn-sm pull-left">Decline</button>
-        <button type="button" id="deleteEvent" class="btn btn-outline-danger btn-sm pull-left">Delete</button>
-      </div>
-    </div>
-  </div></div></div>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="/ubspectrum/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="javascript/eventsAdmin.js"></script>
-</body>
+  <script>
+
+
+
+  </script>
 </html>
