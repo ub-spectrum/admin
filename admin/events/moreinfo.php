@@ -5,6 +5,7 @@
     exit();
   }
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -14,16 +15,15 @@
 
     <title>UB Spectrum Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="/ubspectrum/pdfjs/build/pdf.js"></script>
     <script src="../../events/tagify.min.js"></script>
     <link rel="stylesheet" href="../../events/tagify.css">
     <script src="/ubspectrum/events/tagify.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="/ubspectrum/bootstrap/js/popper.js"></script>
-
-
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    <script src="/ubspectrum/javascript/pdfThumbnails.js"></script>
+    <script src="/ubspectrum/javascript/pdfjs/build/pdf.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -116,6 +116,106 @@
 
         return null;
     }
+
+    function validateInput() {
+            let input = $(this);
+            let isRequired = input.attr('required') ? true : false;
+            let type = input.data('type') || 'text';
+            let isValid = false;
+            if (isRequired && input.val() != '') {
+                isValid = true;
+            }
+
+            if (!isValid) {
+                input.removeClass('is-valid').addClass('is-invalid');
+            }
+            let value = input.val();
+
+            switch (type) {
+                case 'text':
+
+                    break;
+                case 'integer':
+                    break;
+                case 'money':
+
+                    let moneyPatternMatches = value.match(/^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?$/);
+                    if (moneyPatternMatches != null) {
+                        isValid = true;
+                    } else {
+                        isValid = false;
+                    }
+                    break;
+                case 'date':
+                    let datePatternMatches = value.match(/[0-9]{4}-[0-9]{2}-[0-9]{1,2}/);
+                    if (datePatternMatches != null) {
+                        isValid = true;
+                    } else {
+                        isValid = false;
+                    }
+                    break;
+                case 'time':
+                    break;
+                case 'email':
+                    break;
+                case 'phone':
+                    let phonePatternMatches = value.match('\\d{3}[\\-]?\\d{3}[\\-]?\\d{4}');
+                    if (phonePatternMatches != null) {
+                        isValid = true;
+                    } else {
+                        isValid = false;
+                    }
+                    break;
+                case 'link':
+                    let urlPatternMatches = value.match(
+                        /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+                        );
+                    if (urlPatternMatches != null) {
+                        isValid = true;
+                    } else {
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            if (isValid) {
+                input.removeClass('is-invalid').addClass('is-valid');
+            } else {
+                input.removeClass('is-valid').addClass('is-invalid');
+            }
+        }
+
+        function handleTime(){
+            let startTime = $('#start_time').val();
+            let endTime = $('#end_time').val()
+
+            let visibleSibling = $($(this).siblings('input')[0]);
+            let startVisibleSibling = $($('#start_time').siblings('input')[0]);
+            let endVisibleSibling = $($('#end_time').siblings('input')[0]);
+
+            if(endTime == '' || startTime == ''){
+                return;
+            }
+
+            let happensBeforeEnd = false;
+            if(Date.parse('01/01/2011 ' + startTime) < Date.parse('01/01/2011 ' + endTime)){
+                happensBeforeEnd = true;
+            } else {
+                happensBeforeEnd = false;
+            }
+
+            if (happensBeforeEnd) {
+                // visibleSibling.removeClass('is-invalid').addClass('is-valid');
+                startVisibleSibling.removeClass('is-invalid').addClass('is-valid');
+                endVisibleSibling.removeClass('is-invalid').addClass('is-valid');
+            } else {
+                startVisibleSibling.removeClass('is-valid').addClass('is-invalid');
+                endVisibleSibling.removeClass('is-valid').addClass('is-invalid');
+                // visibleSibling.removeClass('is-valid').addClass('is-invalid');
+            }
+
+        }
+
     $(document).ready(function(){
         var input = document.querySelector('input[name=tags-outside]');
         // init Tagify script on the above inputs
@@ -149,6 +249,13 @@
         makeCategoryOptions();
 
         addEventInfo();
+
+        $('input').on('blur', validateInput);
+           $('#contact-section').on('blur','input', validateInput);
+           $('#start_time').on('change', handleTime);
+           $('#end_time').on('change', handleTime);
+           $('textarea').on('blur', validateInput);
+
     })
 </script>
 
@@ -255,6 +362,7 @@
                     $('#flyer-section').append(div);
                     return doc.getPage(1).then(makeThumb)
                     .then(function (canvas) {
+                        document.getElementById("flyerImg").parentNode.removeChild(document.getElementById("flyerImg"));
                         div.appendChild(canvas);
                     })
                 })
@@ -378,7 +486,7 @@
                 <div class="col-xs-12 col-md-3 col-lg-2">
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
-                    <input type="number" id="eventCost" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" name="cost" id="cost" class="form-control"/>
+                    <input type="number" id="eventCost"  data-type="money" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" name="cost" id="cost" class="form-control"/>
                 </div>
 
                 </div>
@@ -409,10 +517,11 @@
             </div>
             <div class="row mb-3">
                 <div class="col-xs-12 col-md-4 text-md-right">
-                    <label for="flyer">Event Flyer</label>
+                    <label for="flyer">Update Event Flyer</label>
                 </div>
-                <div class="col-xs-12 col-md-3 col-lg-2">
+                <div class="col-xs-12 col-md-3">
                     <input type="file" name="flyer" id="flyer" accept=".pdf" onchange="checkFile(event);" />
+                    <img id="flyerImg" data-pdf-thumbnail-file="/ubspectrum/events/downloadEventFlyer.php?eventId=<?php echo $_GET['eventid'] ?>">
                 </div>
             </div>
             <div class="row mb-3">

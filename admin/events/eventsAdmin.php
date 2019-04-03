@@ -66,7 +66,7 @@
             <a class="nav-link" href="/ubspectrum/admin/events/eventsAdmin.php">Events Management<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">Crowdsourced Data Reviews Management</a>
+            <a class="nav-link" href="/ubspectrum/admin/crowdsource/activeDatasetsView.php">Crowdsourced Data Reviews Management</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/ubspectrum/admin/user/history.php" tabindex="-1">History Management</a>
@@ -86,20 +86,21 @@
     <button type="button" onclick="window.location.href='http://stark.cse.buffalo.edu/ubspectrum/events/'" class="btn btn-primary btn" style="float: right;margin-right:3em;">Go To Calendar</button>
     <button type="button" onclick="window.location.href='/ubspectrum/events/AddEvent.php'" class="btn btn-primary btn" style="float: right;margin-right:1em ">Add New Event +</button><br>
 
-  <br><div class="panel"><div class="panel-body">
-    <h3 align="center">Existing Events</h3><br>
-    <div class="card-deck-wrapper">
-    <div class="card-deck" id="existingEvents" align="center"></div>
-    <br>
-  </div></div></div>
+    <br><div class="panel"><div class="panel-body">
+    <h3 align="center">Pending Events</h3><br>
+    <div class="card-deck", id="pendingEvents" align="center"</div></div><br>
+  </div>
+  </div>
 
     <br><br><div style="background-color:#D2D5E0;color:white;padding:10px;"></div><br><br>
 
     <div class="panel"><div class="panel-body">
-    <h3 align="center">Pending Events</h3><br>
-    <div class="card-deck", id="pendingEvents" align="center"</div></div><br>
-  </div>
-  </div><br>
+      <h3 align="center">Existing Events</h3><br>
+      <div class="card-deck-wrapper">
+      <div class="card-deck" id="existingEvents" align="center"></div>
+      <br>
+    </div></div></div>
+  <br>
 </body>
 
 <script src="/ubspectrum/events/tagify.min.js"></script>
@@ -110,9 +111,4 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="/ubspectrum/bootstrap/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="javascript/eventsAdmin.js"></script>
-  <script>
-
-
-
-  </script>
 </html>

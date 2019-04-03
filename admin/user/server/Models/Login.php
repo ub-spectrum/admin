@@ -15,9 +15,10 @@
       $result = mysqli_query($conn, $checkCredentials);
 
       if ($result != NULL) {
+        echo json_encode(current($result));
         // get the result
         $r = mysqli_fetch_assoc($result);
-
+        echo json_encode($result);
         // verify the password
         if ($r['RANK'] == 1) {
           if (hash("sha3-256", $password) == $r['PASSWORD']) {
@@ -33,6 +34,8 @@
       } else {
         header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/user/signin.php?access=false");
       }
+    } else {
+      header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/user/signin.php?invalid=true");
     }
   }
 

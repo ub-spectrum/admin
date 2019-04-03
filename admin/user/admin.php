@@ -41,6 +41,7 @@
       <div id="jumbo">
           <div id="textInJumbo">
             <h1>User Management</h1>
+            <p>This is the page for managing the users in the system</p>
           </div>
       </div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -57,7 +58,7 @@
             <a class="nav-link" href="/ubspectrum/admin/events/eventsAdmin.php">Events Management</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">Crowdsourced Data Reviews Management</a>
+            <a class="nav-link" href="/ubspectrum/admin/crowdsource/activeDatasetsView.php">Crowdsourced Data Reviews Management</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="history.php" tabindex="-1">History Management</a>

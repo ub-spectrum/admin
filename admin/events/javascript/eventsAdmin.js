@@ -5,7 +5,7 @@ window.onload = function() {
     var date = new Date();
     data.map(function(dataObj, index) {
       if (date.toISOString() < dataObj.start) {
-        console.log(dataObj.approve);
+        console.log(dataObj);
         if (dataObj.approve === "accepted") {
           // adds the existing admins to the page
           addExistingEvents(dataObj);

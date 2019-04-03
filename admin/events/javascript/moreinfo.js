@@ -9,6 +9,7 @@ function addEventInfo() {
     url: "/ubspectrum/admin/events/server/fetchEventInfo.php",
     data: {id: id}
   }).then(function(data) {
+    console.log(data);
     addDataToWindow(data);
   });
 

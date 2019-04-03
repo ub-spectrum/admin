@@ -23,9 +23,7 @@
     <h1>Sign into UB Spectrum Admin</h1>
     <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
   </head>
-
   <body class="text-center"><br><br>
-
     <form class="form-signin" style="margin: 0 auto; width:250px" align="center" action="server/signin.php" method="post">
       <h3 align="center">Sign in</h3>
       <h8 id="error" align="center">Username or password is incorrect</h8>
@@ -49,6 +47,7 @@
     const isInvalid = urlParams.get('invalid');
     const hasAccess = urlParams.get('access');
     if (isInvalid !== null || isInvalid === "true") {
+      $('#alert').alert();
       document.getElementById("error").style.display = "block";
     } else if (hasAccess !== null || hasAccess === "false") {
       document.getElementById("access").style.display = "block";

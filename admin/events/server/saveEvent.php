@@ -22,16 +22,18 @@
     $flyerSize="";
     $flyerType="";
 
-    /*if(isset($_FILES['flyer'] ) && $_FILES['flyer']['tmp_name'] != null){
+    $eventId = $_POST['event_id'] or '';
+
+    if(isset($_FILES['flyer'] ) && $_FILES['flyer']['tmp_name'] != null){
         $flyer = file_get_contents($_FILES['flyer']['tmp_name']);
         $flyerSize = $_FILES['flyer']['size'];
         $file_info = new finfo(FILEINFO_MIME);
         $mime_type = $file_info->buffer($flyer);
         $flyerType = $mime_type;
-    }*/
+        Event::updateFlyer($eventId, $flyer, $flyerSize,$flyerType);
+    }
 
     $contact_count = $_POST['contact_count'] or 1;
-    $eventId = $_POST['event_id'] or '';
     $ub_campus = $_POST['ub_campus'] or '';
     $categories =  $_POST['categories'] or '';
 
@@ -72,7 +74,7 @@
         $type = "accepted";
     }
 
-    Event::updateEvent($eventId, $name, $posted_by, $venue, $start_time, $end_time, $description, $link, $cost, "", "", $ub_campus, $flyer, $flyerSize,$flyerType, $type, $categories, $contacts );
+    Event::updateEvent($eventId, $name, $posted_by, $venue, $start_time, $end_time, $description, $link, $cost, "", "", $ub_campus, $type, $categories, $contacts );
 
     header("Location: ../eventsAdmin.php");
 

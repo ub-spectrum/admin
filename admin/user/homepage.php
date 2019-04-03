@@ -93,7 +93,7 @@
           </p>
         </div>
         <div class="card-footer">
-          <a href="" class="btn btn-outline-primary btn-sm">Go Here</a>
+          <a href="/ubspectrum/admin/crowdsource/activeDatasetsView.php" class="btn btn-outline-primary btn-sm">Go Here</a>
         </div>
       </div>
 

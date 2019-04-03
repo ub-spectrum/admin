@@ -37,7 +37,7 @@
           mysqli_query($conn, $eventInfo);
         }
 
-        public static function updateEvent($eventId, $name, $addedBy, $venue, $startTime, $endTime, $description, $link, $cost, $phone, $email,$ubCampusLocation="", $additionalFile="",$additionalFileSize="",$additionalFileType="", $approvalStatus = "pending", $categories="", $contacts=array()) {
+        public static function updateEvent($eventId, $name, $addedBy, $venue, $startTime, $endTime, $description, $link, $cost, $phone, $email,$ubCampusLocation="", $approvalStatus = "pending", $categories="", $contacts=array()) {
           $conn = self::getDB();
 
           $name = $conn->real_escape_string($name);
@@ -50,9 +50,6 @@
           $phone = $conn->real_escape_string($phone);
           $email = $conn->real_escape_string($email);
           $ubCampusLocation = $conn->real_escape_string($ubCampusLocation);
-          $additionalFile= $conn->real_escape_string($additionalFile);
-          $additionalFileSize = $conn->real_escape_string($additionalFileSize);
-          $additionalFileType = $conn->real_escape_string($additionalFileType);
           $categories = $conn->real_escape_string($categories);
           $approvalStatus = $conn->real_escape_string($approvalStatus);
           $addedBy = $conn->real_escape_string($addedBy);
@@ -72,15 +69,11 @@
             PHONE=?,
             EMAIL=?,
             UB_CAMPUS_LOCATION=?,
-            ADDITIONAL_FILE='$additionalFile',
-            ADDITIONAL_FILE_SIZE=?,
-            ADDITIONAL_FILE_TYPE=?,
             APPROVAL_STATUS=?,
             ADDED_BY=? WHERE ID='".$eventId."'");
-            echo $cost;
-          $stmt->bind_param("ssssdsssisss", $name, $venue, $description, $link,
-          $cost, $phone, $email, $ubCampusLocation, $additionalFileSize, $additionalFileType,
-          $approvalStatus, $addedBy);
+
+          $stmt->bind_param("ssssdsssss", $name, $venue, $description, $link,
+            $cost, $phone, $email, $ubCampusLocation, $approvalStatus, $addedBy);
 
           $stmt->execute();
           $last_id = $conn->insert_id;
@@ -127,5 +120,24 @@
               }
               $stmt->close();
           }
+        }
+
+        public static function updateFlyer($eventId, $additionalFile, $additionalFileSize, $additionalFileType) {
+          $conn = self::getDB();
+          $eventId = $conn->real_escape_string($eventId);
+          $additionalFile= $conn->real_escape_string($additionalFile);
+          $additionalFileSize = $conn->real_escape_string($additionalFileSize);
+          $additionalFileType = $conn->real_escape_string($additionalFileType);
+
+          $stmt = $conn->prepare("UPDATE tbl_events SET
+            ADDITIONAL_FILE= '$additionalFile',
+            ADDITIONAL_FILE_SIZE=?,
+            ADDITIONAL_FILE_TYPE=? WHERE ID='".$eventId."'");
+
+          $stmt->bind_param("is", $additionalFileSize, $additionalFileType);
+
+          $stmt->execute();
+          $last_id = $conn->insert_id;
+          $stmt->close();
         }
   }

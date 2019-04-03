@@ -65,7 +65,7 @@
             <a class="nav-link" href="/ubspectrum/admin/events/eventsAdmin.php">Events Management</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">Crowdsourced Data Reviews Management</a>
+            <a class="nav-link" href="/ubspectrum/admin/crowdsource/activeDatasetsView.php">Crowdsourced Data Reviews Management</a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="history.php" tabindex="-1">History Management<span class="sr-only">(current)</span></a>
