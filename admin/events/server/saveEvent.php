@@ -1,11 +1,14 @@
 <?php
     header('content-type: application/json; charset=utf-8');
     header("access-control-allow-origin: *");
-
-    error_reporting(E_ALL);
     ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+
+    session_start();
 
     require_once "Models/Event.php";
+    require_once "../../../events/Models/Events.php";
+    require_once "../../../events/Models/EmailManager.php";
 
     $name = $_POST['name'] or '';
     $venue = $_POST['venue'] or '';
@@ -53,9 +56,6 @@
    $type = htmlentities($type);
    $categories = htmlentities($categories);
 
-    $start_time = "$date $start_time";
-    $end_time = "$date $end_time";
-
     $contacts = array();
     for ($i=1; $i <= $contact_count; $i++) {
         $contactName = $_POST['contact_'.$i.'_name'] or '';
@@ -69,13 +69,50 @@
         $contacts[] = array('name'=> $contactName, 'type' => $contactType, 'info' => $contactInfo);
     }
 
-
     if ($type == "existing") {
         $type = "accepted";
     }
 
-    Event::updateEvent($eventId, $name, $posted_by, $venue, $start_time, $end_time, $description, $link, $cost, "", "", $ub_campus, $type, $categories, $contacts );
+    if (isset($_POST['repeat']) && isset($_POST['lastDay'])) {
+      $repeat = $_POST['repeat'];
+      $lastDay = $_POST['lastDay'];
 
-    header("Location: ../eventsAdmin.php");
+      $repeat = htmlentities($repeat);
+      $lastDay = htmlentities($lastDay);
 
+      $lastDay = "$lastDay $start_time";
+      $start_time = "$date $start_time";
+      $end_time = "$date $end_time";
+
+      Event::updateRecurringEvent($repeat, $lastDay, $eventId, $name, $posted_by, $venue, $start_time, $end_time, $description, $link, $cost, "", "", $ub_campus, $type, $categories, $contacts );
+
+      if ($_POST['updateAllRecurring'] == "make") {
+        Events::makeRecurring($eventId, $repeat, $lastDay, $name, $posted_by, $venue, $start_time, $end_time, $description, $link, $cost, "", "",$ub_campus, $flyer, $flyerSize, $flyerType, $type, $categories, $contacts, "");
+      }
+
+    } else {
+      $start_time = "$date $start_time";
+      $end_time = "$date $end_time";
+
+      if (isset($_POST['updateAllRecurring'])) {
+        if ($_POST['updateAllRecurring'] == "true") {
+            Event::updateAll($eventId, $name, $posted_by, $venue, $start_time, $end_time, $description, $link, $cost, "", "", $ub_campus, $type, $categories, $contacts );
+            header("Location: ../recurringList.php");
+        } else {
+          Event::updateEvent($eventId, $name, $posted_by, $venue, $start_time, $end_time, $description, $link, $cost, "", "", $ub_campus, $type, $categories, $contacts );
+        }
+      }
+    }
+
+     $mail = new SpectrumEmail();
+    $approveSubject = $name." has been approved";
+    $approveMessage = "The event ".$name." has been reviewed and approved. The event will now appear on the Events calendar.";
+    $approveHTMLMessage = "The event ".$name." has been reviewed and approved. The event will now appear on the Events calendar.";
+    $mail->sendMessage(array($posted_by), $approveSubject, $approveHTMLMessage,$approveMessage);
+
+    if (!isset($_SESSION['sessionID'])) {
+      header("Location: ../../../events/");
+    } else {
+      header("Location: ../eventsAdmin.php");
+    }
 ?>

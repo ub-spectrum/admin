@@ -1,8 +1,14 @@
 <?php
   session_start();
   if($_SESSION == array() || !isset($_SESSION['sessionID'])) {
-    header("Location: http://stark.cse.buffalo.edu/ubspectrum/admin/user/signin.php");
-    exit();
+    $_SESSION['type'] = "user";
+    if ($_SESSION['student'] == "false" || !isset($_SESSION['student'])) {
+      header("Location: /ubspectrum/events/");
+    } else {
+      $_SESSION['student'] = "false";
+    }
+  } else {
+    $_SESSION['type'] = "admin";
   }
 ?>
 
@@ -20,14 +26,13 @@
     <script src="/ubspectrum/events/tagify.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="/ubspectrum/bootstrap/js/popper.js"></script>
-    <script src="/ubspectrum/javascript/pdfThumbnails.js"></script>
     <script src="/ubspectrum/javascript/pdfjs/build/pdf.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="site.css">
@@ -49,10 +54,6 @@
 
     var categories;
     categories = [
-		// { label: 'Arty', disabled: false,icon:'', description:'', value: '5' },
-		// { label: 'Sporty', disabled: false,icon:'', description:'', value: '2' },
-		// { label: 'Fun', disabled: false,icon:'', description:'', value: '3' },
-        // { label: 'Cheap', disabled: false,icon:'', description:'', value: '4' },
         <?php
         foreach ($categories as $value) {
             $label = $value['NAME'];
@@ -248,6 +249,17 @@
         tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
         makeCategoryOptions();
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+
+        if (type == "pending") {
+            var recurring = `<div id="newDiv" class="col-xs-12 col-md-4 text-md-right"></div>
+                            <div class="col-xs-12 col-md-3 col-lg-2">
+                              <button type="button" id="recurBtn" class="btn btn-info" onclick=makeRecurring()>Make Reccuring</button>
+                             </div>`
+            $('#recurring').append(recurring);
+        }
+
         addEventInfo();
 
         $('input').on('blur', validateInput);
@@ -257,6 +269,50 @@
            $('textarea').on('blur', validateInput);
 
     })
+
+    function makeRecurring() {
+      var repeat = document.getElementById("rDiv"),
+          lDay = document.getElementById("lDiv");
+
+      if (repeat && lDay) {
+        document.getElementById("recurBtn").innerHTML = "Make Recurring";
+        repeat.remove();
+        document.getElementById("r2Div").remove();
+        lDay.remove();
+        document.getElementById("l2Div").remove();
+      } else {
+        document.getElementById("recurBtn").innerHTML = "Cancel Recurring";
+        var recurring = `<div id="rDiv" class="col-xs-12 col-md-4 text-md-right">
+                            <label for="repeat">Repeat</label>
+                        </div>
+                        <div id="r2Div" class="col-xs-12 col-md-3 col-lg-2">
+                          <select id="repeat" name="repeat" class="form-control" required>
+                              <option value="daily">Daily</option>
+                              <option value="weekly">Weekly</option>
+                              <option value="monthly">Monthly</option>
+                          </select>
+                        </div>`;
+
+            var lastDay= `<div id="lDiv" class="col-xs-12 col-md-4 text-md-right">
+                            <label for="lastDay">Last Day<span class="required">*</span></label>
+                        </div>
+                        <div id="l2Div" class="col-xs-12 col-md-3 col-lg-2">
+                            <input type="text" name="lastDay" id="lastDay" placeholder="Click to Select Time" class="form-control" maxlength="10" required data-type="time"/>
+                        </div>`;
+
+                    $('#repeatDiv').append(recurring);
+                    $('#lastDayDiv').append(lastDay);
+                    $('#lastDay').flatpickr({
+                        // format: 'LT'
+                        enableTime: false,
+                        allowInput: true,
+                        altInput: true,
+                        minDate: "today"
+                    });
+                    $('input').on('blur', validateInput);
+              }
+    }
+
 </script>
 
     <script>
@@ -298,6 +354,9 @@
                     </div>
                     <div class="col-xs-12 col-md-4">
                         <input type="text" name="contact_${currentContactCount}_name" id="contact_${currentContactCount}_name" class="form-control" maxlength="64" required/>
+                        <div class="invalid-feedback">
+                            Please enter a name.
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -318,7 +377,10 @@
                     <div class="col-xs-12 col-md-4">
                         <label>Email</label>&nbsp;<input type="radio" name="contact_${currentContactCount}_info_opt" id="contact_${currentContactCount}_info_opt_email" value="email" checked required onclick="handleContactInfoType(this);"/>&nbsp;&nbsp;
                         <label>Phone</label>&nbsp;<input type="radio" name="contact_${currentContactCount}_info_opt" id="contact_${currentContactCount}_info_opt_phone" value="phone" required onclick="handleContactInfoType(this);"/>
-                        <input type="text" name="contact_${currentContactCount}_info" id="contact_${currentContactCount}_info" class="form-control" maxlength="64" required />
+                        <input type="email" name="contact_${currentContactCount}_info" id="contact_${currentContactCount}_info" class="form-control" maxlength="64" required />
+                        <div class="invalid-feedback" id="contact_${currentContactCount}_info_error">
+                            Please enter a valid email.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -384,14 +446,20 @@
 
                     break;
                 case 'email':
-                    infoTargetElem.attr('type', 'email' );
-                    infoTargetElem.removeAttr('pattern');
-
+                infoTargetElem.attr('type', 'email');
+                infoTargetElem.data('type', 'email');
+                infoTargetElem.removeAttr('pattern');
                 break;
             }
         }
     </script>
-    <?php include('header.php') ?>
+    <?php
+      if ($_SESSION['type'] == "admin") {
+          include('header-info.php');
+      } else if ($_SESSION['type'] == "user") {
+        include('../../events/navbar-bootstrap.php');
+      }
+       ?>
     <div class="container-fluid">
         <div class="row">
             <div class="col-3" style="margin: 0 auto;">
@@ -405,6 +473,9 @@
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <input type="email" name="addedBy" id="addedBy" class="form-control" maxlength="64" required />
+                    <div class="invalid-feedback" >
+                            Please enter a valid email.
+                    </div>
                 </div>
             </div>
             <div class="row mb-3">
@@ -413,6 +484,9 @@
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <input type="text" name="name" id="name" class="form-control" maxlength="64" required />
+                    <div class="invalid-feedback">
+                        Please enter a name.
+                    </div>
                 </div>
             </div>
             <div class="row mb-3">
@@ -421,6 +495,9 @@
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <input type="text" name="venue" id="venue" class="form-control" maxlength="64" required />
+                    <div class="invalid-feedback">
+                        Please enter a venue.
+                    </div>
                 </div>
             </div>
             <div class="row mb-3">
@@ -429,6 +506,9 @@
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <input type="text" name="link" id="link" class="form-control" maxlength="1024" required />
+                    <div class="invalid-feedback">
+                        Please enter a valid link, such as https://www.ubspectrum.com.
+                    </div>
                 </div>
             </div>
             <div class="row mb-3">
@@ -438,6 +518,19 @@
                 <div class="col-xs-12 col-md-4">
                     <textarea type="text" name="description" id="description" class="form-control" maxlength="1000"
                         required></textarea>
+                    <h6 class="pull-right"><span  id="characters">1000</span> characters left</h6>
+                    <div class="invalid-feedback">
+                            Please enter a description.
+                    </div>
+                    <script>
+                    $('#description').keyup(updateCount);
+                    $('#description').keydown(updateCount);
+
+                    function updateCount() {
+                        var cs = $(this).val().length;
+                        $('#characters').text(1000 - cs);
+                    }
+                    </script>
                 </div>
             </div>
             <div class="row mb-3">
@@ -487,6 +580,9 @@
                 <div class="input-group">
                     <span class="input-group-addon">$</span>
                     <input type="number" id="eventCost"  data-type="money" min="0" step="0.01" data-number-to-fixed="2" data-number-stepfactor="100" name="cost" id="cost" class="form-control"/>
+                    <div class="invalid-feedback">
+                            Please enter a valid cost, such as 20 or 21.50.
+                    </div>
                 </div>
 
                 </div>
@@ -515,13 +611,20 @@
                     <input type="text" name="end_time" id="end_time" class="form-control" maxlength="10" required />
                 </div>
             </div>
+            <div class="row mb-3" id="recurring"></div>
+            <div class="row mb-3" id="repeatDiv"></div>
+            <div class="row mb-3" id="lastDayDiv"></div>
+
             <div class="row mb-3">
                 <div class="col-xs-12 col-md-4 text-md-right">
                     <label for="flyer">Update Event Flyer</label>
                 </div>
                 <div class="col-xs-12 col-md-3">
                     <input type="file" name="flyer" id="flyer" accept=".pdf" onchange="checkFile(event);" />
+                    <span>* PDF smaller than 16MB Only</span>
                     <img id="flyerImg" data-pdf-thumbnail-file="/ubspectrum/events/downloadEventFlyer.php?eventId=<?php echo $_GET['eventid'] ?>">
+                    <img id="flyerImg" data-pdf-thumbnail-file="/ubspectrum/events/downloadRecurringEventFlyer.php?eventId=<?php echo $_GET['eventid'] ?>">
+
                 </div>
             </div>
             <div class="row mb-3">
@@ -549,6 +652,9 @@
                     </div>
                     <div class="col-xs-12 col-md-4">
                         <input type="text" name="contact_1_name" id="contact_1_name" class="form-control" maxlength="64" required />
+                        <div class="invalid-feedback">
+                            Please enter a name.
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -571,6 +677,9 @@
                             required />&nbsp;&nbsp;
                         <label>Phone</label>&nbsp;<input type="radio" id="contact_1_info_opt_phone" name="contact_1_info_opt" value="phone"  onclick="handleContactInfoType(this);"/>
                         <input type="text" name="contact_1_info" id="contact_1_info" class="form-control" maxlength="64" required />
+                        <div class="invalid-feedback" id="contact_1_info_error">
+                            Please enter a valid email.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -586,16 +695,20 @@
             <br />
             <div class="row  mb-3">
                 <div class="col-md-4 d-none d-md-block"></div>
-                <div class="col-xs-3">
                     <input type="hidden" name="event_id" id="event_id" value="">
                     <input type="hidden" name="event_type" id="event_type" value="">
+                    <input type="hidden" name="updateAllRecurring" id="updateAllRecurring" value="">
                     <input type="hidden" name="contact_count" id="contact_count" value="1">
-                    <button type="button" class="btn btn-default" onclick="javascript:history.back();">Back</button>
-                    <button  class="btn btn-primary" id="saveBtn" onclick="javascript:void(0);" type="submit">Save</button>
+                    <button type="button" class="btn btn-default" onclick="javascript:history.back();">Back</button>&nbsp
+                    <button  class="btn btn-primary" id="saveBtn" onclick="javascript:void(0);" type="submit">Save</button>&nbsp
                     <button  class="btn btn-danger" id="deleteBtn" onclick=onDeleteConfirm() type="button">Delete</button>
-                    <button  class="btn btn-danger" id="declineBtn" onclick="onDeclineConfirm();" type="button">Decline</button>
-                    <button  class="btn btn-success" id="acceptBtn" onclick="onAcceptConfirm()" type="button">Accept</button>
-                </div>
+                    <?php
+                      if ($_SESSION['type'] == 'admin') {
+                          include('info-footer.php');
+                      } else if ($_SESSION['type'] == 'user' && $_GET['type'] == 'pending') {
+                        echo '<button  class="btn btn-danger" id="deleteBtn" onclick=onDeleteConfirm() type="button">Delete</button>';
+                      }
+                     ?>
             </div>
         </form>
 
@@ -606,7 +719,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Decline Event</h5>
+          <h5 class="modal-title" id="declineTitle">Decline Event</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -626,7 +739,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Delete Event</h5>
+          <h5 class="modal-title" id="deleteTitle">Delete Event</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -646,7 +759,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Accept Event</h5>
+            <h5 class="modal-title" id="acceptTitle">Accept Event</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -656,12 +769,43 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-            <button type="button" onclick=acceptEvent() class="btn btn-success btn-sm">Accept</button>
+            <button type="button" onclick=acceptEvent() class="btn btn-success btn-sm">Save & Accept</button>
           </div>
         </div>
       </div>
     </div>
 
 </body>
+<?php
+if ($_SESSION['type'] == "user") {
+  include('../../events/footer-bootstrap.php');
+}
+ ?>
 
+<script>
+function deleteEvent() {
+  const urlParams = new URLSearchParams(window.location.search);
+  var id = urlParams.get('eventid');
+
+  var type = "single";
+  if (id.includes("RECUR_")) {
+    type = "recur"
+    id = id.replace("RECUR_", "");
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "server/deleteEvent.php",
+    data: {eventId: id, type: type},
+  });
+  <?php
+  if (!isset($_SESSION['sessionID'])) {
+    echo "window.location = '../../events/'";
+  } else {
+    echo "window.location = 'eventsAdmin.php'";
+  }
+   ?>
+
+}
+</script>
 </html>

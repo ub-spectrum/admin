@@ -1,17 +1,31 @@
 function addEventInfo() {
-
   const urlParams = new URLSearchParams(window.location.search);
   const type = urlParams.get('type');
-  const id = urlParams.get('eventid');
+  var id = urlParams.get('eventid');
 
-  $.ajax({
-    type: "POST",
-    url: "/ubspectrum/admin/events/server/fetchEventInfo.php",
-    data: {id: id}
-  }).then(function(data) {
-    console.log(data);
-    addDataToWindow(data);
-  });
+  document.getElementById("updateAllRecurring").value = "false";
+
+  if (id.includes("RECUR_")) {
+    document.getElementById("updateAllRecurring").value = "true";
+    id = id.replace("RECUR_", "");
+
+    $.ajax({
+      type: "POST",
+      url: "server/fetchRecurEvents.php",
+      data: {id: id}
+    }).then(function(data) {
+      addDataToWindow(JSON.parse(data));
+    });
+  } else {
+    $.ajax({
+      type: "POST",
+      url: "/ubspectrum/admin/events/server/fetchEventInfo.php",
+      data: {id: id}
+    }).then(function(data) {
+      addDataToWindow(data);
+    });
+  }
+
 
   document.getElementById("event_id").value = id;
   document.getElementById("event_type").value = type;
@@ -26,7 +40,9 @@ function addEventInfo() {
 }
 
 function addDataToWindow(event) {
-  console.log(event);
+  $('#declineTitle').text("Decline Event: " + event.NAME);
+  $('#deleteTitle').text("Delete Event: " + event.NAME);
+  $('#acceptTitle').text("Accept Event: " + event.NAME);
 
   document.getElementById("addedBy").value = event.ADDED_BY;
 
@@ -38,18 +54,48 @@ function addDataToWindow(event) {
 
   document.getElementById("description").value = event.DESCRIPTION;
 
-  $.ajax({
-    type: "POST",
-    url: "server/fetchEventC.php",
-    data: {
-            id: event.ID,
-            type: "category"
-          }
-  }).then(function(data) {
-    JSON.parse(data).map(function(cat) {
-      onSelectTagFromDropdown(cat.CATEGORY_ID.toString());
+  const urlParams = new URLSearchParams(window.location.search);
+  const type = urlParams.get('type');
+  var id = urlParams.get('eventid');
+
+  if (id.includes("RECUR_")) {
+    if (type == "pending") {
+        makeRecurring();
+        document.getElementById("repeat").value = event.REPEAT_BY;
+        $('#lastDay').flatpickr({
+          enableTime: false,
+          altInput: true,
+          minDate: new Date(),
+          defaultDate: event.LAST_DATE
+        });
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "server/fetchRecurringEventC.php",
+      data: {
+              id: event.RECURING_EVENT_ID,
+              type: "category"
+            }
+    }).then(function(data) {
+      JSON.parse(data).map(function(cat) {
+        onSelectTagFromDropdown(cat.CATEGORY_ID.toString());
+      });
     });
-  });
+  } else {
+      $.ajax({
+        type: "POST",
+        url: "server/fetchEventC.php",
+        data: {
+                id: event.ID,
+                type: "category"
+              }
+      }).then(function(data) {
+        JSON.parse(data).map(function(cat) {
+          onSelectTagFromDropdown(cat.CATEGORY_ID.toString());
+        });
+      });
+}
 
   document.getElementById("ub_campus").value = event.UB_CAMPUS_LOCATION;
 
@@ -86,34 +132,67 @@ function addDataToWindow(event) {
       defaultDate: endDate
   });
 
-  $.ajax({
-    type: "POST",
-    url: "server/fetchEventC.php",
-    data: {
-            id: event.ID,
-            type: "contact"
-          }
-  }).then(function(data) {
-    var jsonData = JSON.parse(data);
-    jsonData.map(function(con, index) {
-      console.log(con);
-      var i = index + 1;
+  if (id.includes("RECUR_")) {
+    $.ajax({
+      type: "POST",
+      url: "server/fetchRecurringEventC.php",
+      data: {
+              id: event.RECURING_EVENT_ID,
+              type: "contact"
+            }
+    }).then(function(data) {
+      var jsonData = JSON.parse(data);
+      jsonData.map(function(con, index) {
+        var i = index + 1;
 
-      document.getElementById("contact_" + i + "_name").value = con.PERSON_NAME;
-      document.getElementById("contact_" + i + "_type").value = con.CONTACT_TYPE;
-      if (con.ADDITIONAL_INFO.includes("@")) {
-        $("#contact_" + i + "_info_opt_email").prop("checked", true);
+        document.getElementById("contact_" + i + "_name").value = con.PERSON_NAME;
+        document.getElementById("contact_" + i + "_type").value = con.CONTACT_TYPE;
+        if (con.ADDITIONAL_INFO.includes("@")) {
+          $("#contact_" + i + "_info_opt_email").prop("checked", true);
 
-      } else {
-        $("#contact_" + i + "_info_opt_phone").prop("checked", true);
-      }
-      document.getElementById("contact_" + i + "_info").value = con.ADDITIONAL_INFO;
+        } else {
+          $("#contact_" + i + "_info_opt_phone").prop("checked", true);
+        }
+        document.getElementById("contact_" + i + "_info").value = con.ADDITIONAL_INFO;
 
-      if (index < jsonData.length - 1) {
-        addContactFields();
-      }
+        if (index < jsonData.length - 1) {
+          addContactFields();
+        }
+      });
     });
-  });
+
+  } else {
+    console.log(id);
+    console.log(event.ID);
+    $.ajax({
+      type: "POST",
+      url: "server/fetchEventC.php",
+      data: {
+              id: event.ID,
+              type: "contact"
+            }
+    }).then(function(data) {
+      var jsonData = JSON.parse(data);
+      jsonData.map(function(con, index) {
+        console.log(con);
+        var i = index + 1;
+
+        document.getElementById("contact_" + i + "_name").value = con.PERSON_NAME;
+        document.getElementById("contact_" + i + "_type").value = con.CONTACT_TYPE;
+        if (con.ADDITIONAL_INFO.includes("@")) {
+          $("#contact_" + i + "_info_opt_email").prop("checked", true);
+
+        } else {
+          $("#contact_" + i + "_info_opt_phone").prop("checked", true);
+        }
+        document.getElementById("contact_" + i + "_info").value = con.ADDITIONAL_INFO;
+
+        if (index < jsonData.length - 1) {
+          addContactFields();
+        }
+      });
+    });
+  }
 }
 
 function onDeleteConfirm() {
@@ -129,19 +208,7 @@ function onAcceptConfirm() {
 }
 
 function acceptEvent() {
+  document.getElementById("updateAllRecurring").value = "make";
   document.getElementById("event_type").value = "accepted";
   document.forms["info"].submit();
-}
-
-function deleteEvent() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get('eventid');
-
-  $.ajax({
-    type: "POST",
-    url: "server/deleteEvent.php",
-    data: {eventId: id},
-  });
-  window.location = "eventsAdmin.php";
-
 }

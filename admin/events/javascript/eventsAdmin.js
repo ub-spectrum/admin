@@ -1,61 +1,93 @@
-var pending, index;
-
 window.onload = function() {
+  $('#pendingEvents').DataTable({paging: false, scrollY: 400});
+  $('#acceptedEvents').DataTable({paging: false, scrollY: 400});
+
   $.get("/ubspectrum/events/fetchEvents.php", function(data, status){
     var date = new Date();
     data.map(function(dataObj, index) {
       if (date.toISOString() < dataObj.start) {
-        console.log(dataObj);
-        if (dataObj.approve === "accepted") {
+        if (dataObj.approve === "accepted" && dataObj.recurring == null) {
+          var onclick = "window.location.href=\'moreinfo.php?type=accepted&eventid=" + dataObj.id + "\'";
           // adds the existing admins to the page
-          addExistingEvents(dataObj);
-        } else if (dataObj.approve === "pending") {
-          // adds the pending admins to the page
-          addPendingEvents(dataObj);
+          addAcceptedEvents(dataObj, onclick);
         }
       }
     });
   });
 
+
+      $.get("/ubspectrum/admin/events/server/fetchPendingEvents.php", function(data, status){
+        var date = new Date();
+        data.map(function(dataObj, index) {
+          if (date.toISOString() < dataObj.start) {
+            if (dataObj.approve === "pending") {
+              // adds the pending admins to the page
+              addPendingEvents(dataObj);
+            }
+          }
+        });
+      });
+
+    $.get("server/fetchRecurEvents.php", function(data, status) {
+      var date = new Date();
+      data.map(function(dataObj, index) {
+        if (date.toISOString() < dataObj.start) {
+          if (dataObj.approved === "pending") {
+            dataObj.id = "RECUR_" + dataObj.id;
+            addPendingEvents(dataObj);
+          } else if (dataObj.approved === "accepted") {
+            dataObj.id = "RECUR_" + dataObj.id;
+            var onclick = "window.location.href=\'recurringList.php?eventid=" + dataObj.id + "\'";
+            addAcceptedEvents(dataObj, onclick);
+          }
+        }
+      });
+    });
 }
 
 /**
   function to dynamically add pending admins to the web page
 */
 function addPendingEvents(pendingEvent) {
-    var startDate = new Date(pendingEvent.start),
-        endDate = new Date(pendingEvent.end),
-        formatStartDate = startDate.toLocaleDateString(),
-        formatStartTime = startDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
-        formatEndTime = endDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
-        myCol = $('<div class="col-sm-3 col-md-3 pb-2" id=card' + pendingEvent.id + '></div>'),
-        myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
-                  '<h5 class="card-title">' + pendingEvent.title + '</h5>' +
-                  '<p class="card-text">Description: ' + pendingEvent.description + '<br>Date: ' + formatStartDate +
-                  '<br> Time: ' + formatStartTime + ' - ' + formatEndTime + '</p><a href="#" id=info'+ pendingEvent.id +
-                  ' onclick="window.location.href=\'moreinfo.php?type=pending&eventid=' + pendingEvent.id + '\'" class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
-    // adds card to card list
-    myPanel.appendTo(myCol);
-    myCol.appendTo('#pendingEvents');
+  var startDate = new Date(pendingEvent.start),
+      endDate = new Date(pendingEvent.end),
+      formatStartDate = startDate.toLocaleDateString(),
+      table = $("#pendingEvents").DataTable();
+
+
+  var startTime = pendingEvent.start.split(/\D+/),
+      endTime = pendingEvent.end.split(/\D+/),
+      formatStartTime = startTime[3] + ":" + startTime[4],
+      formatEndTime = endTime[3] + ":" + endTime[4];
+
+      table.row.add([pendingEvent.id,
+                      pendingEvent.title,
+                      pendingEvent.description,
+                      formatStartDate,
+                      formatStartTime,
+                      formatEndTime,
+                      '<a href="#" id=info'+ event.id +
+                      ' onclick="window.location.href=\'moreinfo.php?type=pending&eventid=' + pendingEvent.id +
+                      '\'" class="btn btn-primary btn-sm pull-left">Accept/Decline</a>']).draw();
 }
 
-/**
-  function to dynamically add the already existing admins to the page
-*/
-function addExistingEvents(event) {
-  var startDate = new Date(event.start),
-      endDate = new Date(event.end),
+function addAcceptedEvents(acceptedEvent, onclick) {
+  var startDate = new Date(acceptedEvent.start),
       formatStartDate = startDate.toLocaleDateString(),
-      formatStartTime = startDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
-      formatEndTime = endDate.toLocaleTimeString("en-us", {hour: "2-digit", minute: "2-digit"}),
-      myCol = $('<div class="col-sm-3 col-md-3 pb-2" id="card' + event.id + '"></div>'),
-      myPanel = $('<div class="card bg-dark text-white" style="width: 18rem;"><div class="card-body">' +
-                '<h5 class="card-title">' + event.title + '</h5>' +
-                '<p class="card-text">Description: ' + event.description + '<br>Date: ' + formatStartDate +
-                '<br> Time: ' + formatStartTime + ' - ' + formatEndTime + '</p><a href="#" id=info'+ event.id +
-                ' onclick="window.location.href=\'moreinfo.php?type=accepted&eventid=' + event.id + '\'" class="btn btn-outline-primary btn-sm pull-left">More Info</a></div></div>');
+      table = $("#acceptedEvents").DataTable();
 
-  // adds the card to the page
-  myPanel.appendTo(myCol);
-  myCol.appendTo('#existingEvents');
+  var startTime = acceptedEvent.start.split(/\D+/),
+      endTime = acceptedEvent.end.split(/\D+/),
+      formatStartTime = startTime[3] + ":" + startTime[4],
+      formatEndTime = endTime[3] + ":" + endTime[4];
+
+       table.row.add([acceptedEvent.id,
+                      acceptedEvent.title,
+                      acceptedEvent.description,
+                      formatStartDate,
+                      formatStartTime,
+                      formatEndTime,
+                      '<a href="#" id=info'+ acceptedEvent.id +
+                      ' onclick=' + onclick +
+                      ' class="btn btn-primary btn-sm pull-left">More Info</a>']).draw();
 }

@@ -8,5 +8,5 @@
   session_unset();
   session_destroy();
 
-  header("Location: /ubspectrum/admin/user/signin.php", true, 301);
+  header("Location: ../signin.php", true, 301);
  ?>

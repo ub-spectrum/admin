@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="/ubspectrum/events/tagify.css">
 
     <title>UB Spectrum Admin</title>
+
+    
     <?php include('../../events/navbar-bootstrap.php')?>
     <br>
     <h1>Sign into UB Spectrum Admin</h1>
@@ -26,7 +28,8 @@
   <body class="text-center"><br><br>
     <form class="form-signin" style="margin: 0 auto; width:250px" align="center" action="server/signin.php" method="post">
       <h3 align="center">Sign in</h3>
-      <h8 id="error" align="center">Username or password is incorrect</h8>
+      <!--<h8 id="error" align="center">Username or password is incorrect</h8>-->
+      <h8 id="error" align="center"></h8>
       <label for="inputEmail">
       <input type="email" id="inputEmail" class="form-control input-sm" size=40 placeholder="Email address" name="username" required autofocus></label>
       <label for="inputPassword">
@@ -34,7 +37,6 @@
       <button class="btn btn-primary btn" type="submit">Sign in</button>
     </form>
     <button type="button" onclick="window.location.href='SignUp.php'" class="btn btn-link">Not an admin? Apply to be one</button><br><br>
-    <h8 id="access" align="center">Admin Request Pending</h8>
     <link rel="stylesheet" href="/ubspectrum/events/tagify.css">
     <?php include('../../events/footer-bootstrap.php') ?>
   </body>
@@ -47,11 +49,42 @@
     const isInvalid = urlParams.get('invalid');
     const hasAccess = urlParams.get('access');
     if (isInvalid !== null || isInvalid === "true") {
-      $('#alert').alert();
+      document.getElementById("error").innerHTML = "Username or Password Incorrect";
       document.getElementById("error").style.display = "block";
     } else if (hasAccess !== null || hasAccess === "false") {
-      document.getElementById("access").style.display = "block";
+      document.getElementById("error").innerHTML = "Admin Request Pending";
+      document.getElementById("error").style.display = "block";
     }
   }
+
+  $('input').on('blur', validateInput);
+
+  function validateInput() {
+          let input = $(this);
+          let isRequired = input.attr('required') ? true : false;
+          let type = input.data('type') || 'text';
+          let isValid = false;
+          if (isRequired && input.val() != '') {
+              isValid = true;
+          }
+
+          if (!isValid) {
+              input.removeClass('is-valid').addClass('is-invalid');
+          }
+          let value = input.val();
+
+          switch (type) {
+              case 'text':
+                  break;
+              case 'email':
+                  break;
+          }
+
+          if (isValid) {
+              input.removeClass('is-invalid').addClass('is-valid');
+          } else {
+              input.removeClass('is-valid').addClass('is-invalid');
+          }
+      }
 </script>
 </html>

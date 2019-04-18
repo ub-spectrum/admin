@@ -2,7 +2,7 @@
   header('content-type: application/json; charset=utf-8');
   ini_set('display_errors', 1);
   error_reporting(E_ALL);
-  require_once "Models/Login.php";
+  require_once "Login.php";
 
   // get the username and the password
   $username = $_POST['username'] or '';

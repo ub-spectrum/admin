@@ -4,6 +4,9 @@
     header("Location: signin.php");
     exit();
   }
+  else{
+    include $_SERVER["DOCUMENT_ROOT"]."/ubspectrum/admin/superHeader.php";
+  }
 ?>
 
 <!DOCTYPE html>
@@ -14,8 +17,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>UB Spectrum Admin</title>
-    <link rel="stylesheet" type="text/css" href="/ubspectrum/bootstrap/css/header.css">
-    <style>
+   <!--  <link rel="stylesheet" type="text/css" href="../../bootstrap/css/header.css">
+     <link rel="stylesheet" type="text/css" href="../../bootstrap/css/bootstrap.min.css"> -->
+   <!--  <style>
       .panel {
         margin-right: 5%;
         margin-left: 5%;
@@ -31,9 +35,9 @@
         margin: 20px;
       }
 
-    </style>
+    </style> -->
 
-    <a href="https://www.ubspectrum.com/" target="blank">
+   <!--  <a href="https://www.ubspectrum.com/" target="blank">
    <div class="flip-card" >
        <div class="flip-card-inner">
            <div class="flip-card-front">
@@ -44,22 +48,22 @@
            </div>
        </div>
    </div>
-</a>
-
+</a> -->
+<!-- 
   <div id="jumbo">
       <div id="textInJumbo">
         <h1>Admin Homepage</h1>
         <p>Navigate to any app from here</p>
         <button type="button" onclick="window.location.href='server/signout.php'" class="btn btn-primary btn" style="float: right;margin-right:1em ">Sign Out</button><br>
       </div>
-  </div>
-    <link rel="stylesheet" type="text/css" href="/ubspectrum/bootstrap/css/bootstrap.min.css">
+  </div> -->
+   
   </head>
   <body>
-    <div class="container">
+    <div class=" heading container">
       <div class="card-deck">
       <div class="card bg-dark text-white">
-        <img class="card-img-top" src="images/userMng.PNG" alt="Card image cap">
+        <!-- <img class="card-img-top" src="images/userMng.PNG" alt="Card image cap"> -->
         <div class="card-body">
           <h4 class="card-title">User Management</h4>
           <p class="card-text">
@@ -67,12 +71,12 @@
           </p>
         </div>
         <div class="card-footer">
-          <a href="admin.php" class="btn btn-outline-primary btn-sm">Go Here</a>
+          <a href="userManagement.php" class="btn btn-outline-primary btn-sm">Go Here</a>
         </div>
       </div>
 
       <div class="card bg-dark text-white">
-        <img class="card-img-top" src="images/eventsMng.PNG" alt="Card image cap">
+        <!-- <img class="card-img-top" src="images/eventsMng.PNG" alt="Card image cap"> -->
         <div class="card-body">
           <h4 class="card-title">Events Management</h4>
           <p class="card-text">
@@ -85,7 +89,7 @@
       </div>
 
       <div class="card bg-dark text-white">
-        <img class="card-img-top" src="images/crowdMng.PNG" alt="Card image cap">
+        <!-- <img class="card-img-top" src="images/crowdMng.PNG" alt="Card image cap"> -->
         <div class="card-body">
           <h4 class="card-title">Crowdsourced Data Reviews Management</h4>
           <p class="card-text">
@@ -93,12 +97,12 @@
           </p>
         </div>
         <div class="card-footer">
-          <a href="/ubspectrum/admin/crowdsource/activeDatasetsView.php" class="btn btn-outline-primary btn-sm">Go Here</a>
+          <a href="../crowdsource/datasetsView.php" class="btn btn-outline-primary btn-sm">Go Here</a>
         </div>
       </div>
 
       <div class="card bg-dark text-white">
-        <img class="card-img-top" src="images/history.PNG" alt="Card image cap">
+        <!-- <img class="card-img-top" src="images/history.PNG" alt="Card image cap"> -->
         <div class="card-body">
           <h4 class="card-title">History</h4>
           <p class="card-text">
@@ -113,7 +117,7 @@
 
     </div>
   </body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
 <script src="../../bootstrap/js/bootstrap.min.js"></script>
-<script src="/ubspectrum/bootstrap/js/popper.js"></script>
+<script src="../../bootstrap/js/popper.js"></script> -->
 </html>
